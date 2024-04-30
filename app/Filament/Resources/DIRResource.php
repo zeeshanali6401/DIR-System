@@ -25,7 +25,7 @@ class DIRResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-wallet';
     protected static ?string $navigationLabel = 'DIR';
-
+    
 
     public static function form(Form $form): Form
     {
@@ -131,12 +131,14 @@ class DIRResource extends Resource
                 TextColumn::make('evidence'),
                 TextColumn::make('finding_remarks'),
                 TextColumn::make('pco_names'),
+                
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\CreateAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

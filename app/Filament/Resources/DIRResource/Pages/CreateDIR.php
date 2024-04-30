@@ -9,7 +9,5 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateDIR extends CreateRecord
 {
     protected static string $resource = DIRResource::class;
-    protected static ?string $title = 'DIR';
-
-
+    protected static ?string $navigationLabel = 'DIR';
 }
