@@ -94,7 +94,7 @@ class DIRResource extends Resource
 
                 TextInput::make('case_nature'),
                 DatePicker::make('date')
-                ->minDate(now()->addYears(1))
+                ->minDate(date('Y-m-d'))
                 ->native(false),
                 TimePicker::make('time'),
                 TextInput::make('caller_phone'),
