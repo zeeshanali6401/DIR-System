@@ -19,13 +19,13 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 
-
-
 class DIRResource extends Resource
 {
     protected static ?string $model = DIR::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-wallet';
+    protected static ?string $navigationLabel = 'DIR';
+
 
     public static function form(Form $form): Form
     {
@@ -139,9 +139,7 @@ class DIRResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 
@@ -160,4 +158,5 @@ class DIRResource extends Resource
             'edit' => Pages\EditDIR::route('/{record}/edit'),
         ];
     }
+    
 }
