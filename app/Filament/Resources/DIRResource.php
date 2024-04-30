@@ -157,7 +157,7 @@ class DIRResource extends Resource
         return [
             'index' => Pages\ListDIRS::route('/'),
             'create' => Pages\CreateDIR::route('/create'),
-            'edit' => Pages\EditDIR::route('/{record}/edit'),
+            'edit' => Pages\EditDIR::route('/{record}/edit')
         ];
     }
     
