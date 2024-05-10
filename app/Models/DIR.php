@@ -14,7 +14,7 @@ class DIR extends Model
         'division',
         'ps',
         'case_nature',
-        'date',
+        // 'date',
         'time',
         'caller_phone',
         'case_description',
@@ -23,5 +23,5 @@ class DIR extends Model
         'evidence',
         'finding_remarks',
         'pco_names',
-    ];    
+    ];
 }

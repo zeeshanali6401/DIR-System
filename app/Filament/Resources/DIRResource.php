@@ -25,7 +25,6 @@ class DIRResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-wallet';
     protected static ?string $navigationLabel = 'DIR';
-    
 
     public static function form(Form $form): Form
     {
@@ -93,9 +92,9 @@ class DIRResource extends Resource
                 ])->searchable(),
 
                 TextInput::make('case_nature'),
-                DatePicker::make('date')
-                ->minDate(date('Y-m-d'))
-                ->native(false),
+                // DatePicker::make('date')
+                // ->minDate(date('Y-m-d'))
+                // ->native(false),
                 TimePicker::make('time'),
                 TextInput::make('caller_phone'),
                 TextInput::make('case_description'),
@@ -122,7 +121,7 @@ class DIRResource extends Resource
                 TextColumn::make('division'),
                 TextColumn::make('ps'),
                 TextColumn::make('case_nature'),
-                TextColumn::make('date'),
+                // TextColumn::make('date'),
                 TextColumn::make('time'),
                 TextColumn::make('caller_phone'),
                 TextColumn::make('case_description'),
@@ -131,7 +130,7 @@ class DIRResource extends Resource
                 TextColumn::make('evidence'),
                 TextColumn::make('finding_remarks'),
                 TextColumn::make('pco_names'),
-                
+
             ])
             ->filters([
                 //
@@ -160,5 +159,5 @@ class DIRResource extends Resource
             'edit' => Pages\EditDIR::route('/{record}/edit')
         ];
     }
-    
+
 }

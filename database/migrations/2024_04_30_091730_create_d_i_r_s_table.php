@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('division');
             $table->string('ps');
             $table->string('case_nature');
-            $table->date('date');
+            // $table->date('date');
             $table->time('time');
             $table->string('caller_phone');
             $table->text('case_description');
