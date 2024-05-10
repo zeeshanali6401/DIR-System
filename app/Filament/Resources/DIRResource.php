@@ -18,6 +18,12 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
+
+use pxlrbt\FilamentExcel\Columns\Column;
+
 
 class DIRResource extends Resource
 {
@@ -137,10 +143,10 @@ class DIRResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\CreateAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+                ExportBulkAction::make()
             ]);
     }
 
@@ -159,5 +165,6 @@ class DIRResource extends Resource
             'edit' => Pages\EditDIR::route('/{record}/edit')
         ];
     }
+
 
 }

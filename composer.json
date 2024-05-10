@@ -12,7 +12,8 @@
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
-        "livewire/livewire": "^3.4"
+        "livewire/livewire": "^3.4",
+        "pxlrbt/filament-excel": "^2.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
