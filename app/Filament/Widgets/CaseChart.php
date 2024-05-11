@@ -9,7 +9,7 @@ use Flowframe\Trend\TrendValue;
 
 class CaseChart extends ChartWidget
 {
-    protected static ?string $heading = 'Monthly statistics of found cases';
+    protected static ?string $heading = 'Monthly stats';
     protected static string $color = 'info';
     protected function getData(): array
     {
@@ -24,14 +24,17 @@ class CaseChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Found Cases',
+                    'label' => 'Total Cases Stat',
                     'data' => $data->map(fn (TrendValue $value) => $value->aggregate)
                 ],
             ],
             'labels' => $data->map(fn (TrendValue $value) => $value->date),
         ];
     }
-
+    public function getDescription(): ?string
+    {
+        return 'The number of DIR recorded per month.';
+    }
     protected function getType(): string
     {
         return 'line';
