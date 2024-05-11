@@ -7,7 +7,7 @@ use Filament\Widgets\ChartWidget;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
 
-class CaseChart extends ChartWidget
+class LineChart extends ChartWidget
 {
     protected static ?string $heading = 'Monthly stats';
     protected static string $color = 'info';

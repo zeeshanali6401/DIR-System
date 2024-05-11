@@ -5,7 +5,7 @@ namespace App\Filament\Widgets;
 use App\Models\DIR;
 use Filament\Widgets\ChartWidget;
 
-class FoundCasesChart extends ChartWidget
+class PieChart extends ChartWidget
 {
     protected static ?string $heading = 'Chart';
     protected static ?string $maxHeight = '300px';
