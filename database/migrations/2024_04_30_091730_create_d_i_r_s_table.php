@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('division')->required();
             $table->string('ps')->required();
             $table->string('case_nature')->required();
-            // $table->date('date')->required();
+            $table->date('case_date')->required();
             $table->time('time')->required();
             $table->string('caller_phone')->required();
             $table->text('case_description')->required();

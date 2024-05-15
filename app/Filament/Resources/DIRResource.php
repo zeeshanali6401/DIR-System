@@ -10,7 +10,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
@@ -22,12 +21,6 @@ use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\ImageColumn;
-use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
-use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
-use pxlrbt\FilamentExcel\Exports\ExcelExport;
-
-use pxlrbt\FilamentExcel\Columns\Column;
-
 
 class DIRResource extends Resource
 {
@@ -104,9 +97,9 @@ class DIRResource extends Resource
                         Textarea::make('case_description')->required(),
                         TextInput::make('location')->required(),
                         TextInput::make('case_nature')->required(),
-                        // DatePicker::make('date')
-                        // ->minDate(date('Y-m-d'))
-                        // ->native(false),
+                        DatePicker::make('case_date')
+                            ->minDate(date('Y-m-d'))
+                            ->native(false),
                         TimePicker::make('time')->required(),
                         TextInput::make('caller_phone')->required(),
                         TextInput::make('camera_id')->required(),
@@ -131,21 +124,26 @@ class DIRResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('team'),
-                TextColumn::make('shift'),
+                TextColumn::make('team')->sortable(),
+                TextColumn::make('shift')->sortable(),
                 ImageColumn::make('images')->circular()
                     ->stacked(),
-                TextColumn::make('division'),
-                TextColumn::make('ps'),
-                TextColumn::make('case_nature'),
-                // TextColumn::make('date'),
-                TextColumn::make('time'),
+                TextColumn::make('finding_remarks')
+                    ->state(function (DIR $record): string {
+                        return $record->finding_remarks == 'found' ? 'Found' : 'Not Found';
+                    })->badge()
+                    ->color(fn (string $state): string => $state == 'Found' ? 'success' : 'danger'),
+                TextColumn::make('division')->sortable(),
+                TextColumn::make('ps')->sortable(),
+                TextColumn::make('case_nature')->sortable(),
+                TextColumn::make('case_date')->label('Date'),
+                TextColumn::make('time')->sortable(),
                 TextColumn::make('caller_phone'),
                 TextColumn::make('case_description'),
                 TextColumn::make('location'),
                 TextColumn::make('camera_id'),
                 TextColumn::make('evidence'),
-                TextColumn::make('finding_remarks'),
+                // TextColumn::make('finding_remarks')->sortable(),
                 TextColumn::make('pco_names'),
 
             ])
@@ -158,7 +156,6 @@ class DIRResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
-                ExportBulkAction::make()
             ]);
     }
 

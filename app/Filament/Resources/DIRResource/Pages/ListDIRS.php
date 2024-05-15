@@ -23,12 +23,26 @@ class ListDIRS extends ListRecords
             ExportAction::make()
                 ->exports([
                     ExcelExport::make()
-                        ->fromTable()
+                        // ->fromTable()
                         ->withFilename(date('d-m-Y'))
                         ->withWriterType(\Maatwebsite\Excel\Excel::CSV)
                         ->withColumns([
-                            // Column::make('id'),
-                        ])
+                            Column::make('team'),
+                            Column::make('shift'),
+                            Column::make('division'),
+                            Column::make('ps'),
+                            Column::make('case_nature'),
+                            Column::make('time'),
+                            Column::make('case_date'),
+                            Column::make('caller_phone'),
+                            Column::make('case_description'),
+                            Column::make('location'),
+                            Column::make('camera_id'),
+                            Column::make('evidence'),
+                            Column::make('finding_remarks'),
+                            Column::make('pco_names')
+
+                            ])
                 ]),
         ];
     }

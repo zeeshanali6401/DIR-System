@@ -14,7 +14,7 @@ class DIR extends Model
         'division',
         'ps',
         'case_nature',
-        // 'date',
+        'case_date',
         'time',
         'caller_phone',
         'case_description',
