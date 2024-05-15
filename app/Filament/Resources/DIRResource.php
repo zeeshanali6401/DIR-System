@@ -108,8 +108,8 @@ class DIRResource extends Resource
                         TextInput::make('pco_names')->required(),
                         Radio::make('finding_remarks')->required()
                             ->options([
-                                'found' => 'Found',
-                                'not_found' => 'Not Found',
+                                1 => 'Found',
+                                0 => 'Not Found',
                             ]),
                         FileUpload::make('images')
                             ->multiple()
@@ -130,7 +130,7 @@ class DIRResource extends Resource
                     ->stacked(),
                 TextColumn::make('finding_remarks')
                     ->state(function (DIR $record): string {
-                        return $record->finding_remarks == 'found' ? 'Found' : 'Not Found';
+                        return $record->finding_remarks == 1 ? 'Found' : 'Not Found';
                     })->badge()
                     ->color(fn (string $state): string => $state == 'Found' ? 'success' : 'danger'),
                 TextColumn::make('division')->sortable(),

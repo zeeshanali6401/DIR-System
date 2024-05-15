@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('location')->required();
             $table->string('camera_id')->required();
             $table->text('evidence')->required();
-            $table->text('finding_remarks')->required();
+            $table->boolean('finding_remarks')->required();
             $table->string('pco_names')->required();
             $table->string('images')->required();
             $table->timestamps();
