@@ -23,5 +23,9 @@ class DIR extends Model
         'evidence',
         'finding_remarks',
         'pco_names',
+        'images',
+    ];
+    protected $casts = [
+        'images' => 'array',
     ];
 }

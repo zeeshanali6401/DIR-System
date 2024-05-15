@@ -13,20 +13,21 @@ return new class extends Migration
     {
         Schema::create('d_i_r_s', function (Blueprint $table) {
             $table->id();
-            $table->string('team');
-            $table->string('shift');
-            $table->string('division');
-            $table->string('ps');
-            $table->string('case_nature');
-            // $table->date('date');
-            $table->time('time');
-            $table->string('caller_phone');
-            $table->text('case_description');
-            $table->string('location');
-            $table->string('camera_id');
-            $table->text('evidence');
-            $table->text('finding_remarks');
-            $table->string('pco_names');
+            $table->string('team')->required();
+            $table->string('shift')->required();
+            $table->string('division')->required();
+            $table->string('ps')->required();
+            $table->string('case_nature')->required();
+            // $table->date('date')->required();
+            $table->time('time')->required();
+            $table->string('caller_phone')->required();
+            $table->text('case_description')->required();
+            $table->string('location')->required();
+            $table->string('camera_id')->required();
+            $table->text('evidence')->required();
+            $table->text('finding_remarks')->required();
+            $table->string('pco_names')->required();
+            $table->string('images')->required();
             $table->timestamps();
         });
     }
