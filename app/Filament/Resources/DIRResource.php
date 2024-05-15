@@ -97,9 +97,9 @@ class DIRResource extends Resource
                         Textarea::make('case_description')->required(),
                         TextInput::make('location')->required(),
                         TextInput::make('case_nature')->required(),
-                        DatePicker::make('case_date')
-                            ->minDate(date('Y-m-d'))
-                            ->native(false),
+                        DatePicker::make('case_date'),
+                            // ->minDate(date('Y-m-d'))
+                            // ->native(false),
                         TimePicker::make('time')->required(),
                         TextInput::make('caller_phone')->required(),
                         TextInput::make('camera_id')->required(),
