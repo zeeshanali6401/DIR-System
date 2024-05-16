@@ -96,10 +96,15 @@ class DIRResource extends Resource
 
                         Textarea::make('case_description')->required(),
                         TextInput::make('location')->required(),
-                        TextInput::make('case_nature')->required(),
+                        Select::make('case_nature')->required()->options([
+                            'Traffic Offence' => 'Traffic Offence',
+                            'Local & Special Laws' => 'Local & Special Laws',
+                            'Crime Against Person' => 'Crime Against Person',
+                            'Crime Against Property' => 'Crime Against Property'
+                        ])->searchable(),
                         DatePicker::make('case_date'),
-                            // ->minDate(date('Y-m-d'))
-                            // ->native(false),
+                        // ->minDate(date('Y-m-d'))
+                        // ->native(false),
                         TimePicker::make('time')->required(),
                         TextInput::make('caller_phone')->required(),
                         TextInput::make('camera_id')->required(),

@@ -5,8 +5,9 @@ namespace App\Filament\Widgets;
 use App\Models\DIR;
 use Filament\Widgets\ChartWidget;
 
-class PieChart extends ChartWidget
+class DoughnutChart extends ChartWidget
 {
+    protected static ?int $sort = 3;
     protected static ?string $heading = 'Chart';
     protected static ?string $maxHeight = '300px';
     protected static ?array $options = ['scales' => ['x' => ['display' => false,], 'y' => ['display' => false,],],];
