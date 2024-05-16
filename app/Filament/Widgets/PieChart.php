@@ -17,12 +17,12 @@ class PieChart extends ChartWidget
 
         $foundCount = DIR::whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
-            ->where('finding_remarks', 'found')
+            ->where('finding_remarks', 1)
             ->count();
 
         $notFoundCount = DIR::whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
-            ->where('finding_remarks', 'not_found')
+            ->where('finding_remarks', 0)
             ->count();
 
         return [
