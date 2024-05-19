@@ -3,15 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\DIRResource\Pages;
-use App\Filament\Resources\DIRResource\RelationManagers;
 use App\Models\DIR;
-use Filament\Forms;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
@@ -24,11 +20,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\ViewField;
 use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Filament\Support\RawJs;
 use Filament\Tables\Columns\ImageColumn;
-use Illuminate\Support\Str;
-
 
 class DIRResource extends Resource
 {
@@ -39,7 +31,6 @@ class DIRResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $editForm = $form->getOperation() == 'edit';
         return $form
             ->schema([
                 Section::make()
@@ -74,6 +65,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
 
                         TextInput::make('shift')->default(function () {
@@ -100,6 +92,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
                         Select::make('division')->required()
                             ->options([
@@ -190,6 +183,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
                         TextInput::make('location')->required()
                             ->hidden(function (Get $get) use ($form): bool {
@@ -205,6 +199,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
                         TextInput::make('cro')->required()
                             ->hidden(function (Get $get) use ($form): bool {
@@ -220,6 +215,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
                         TextInput::make('face_trace')->required()
                             ->hidden(function (Get $get) use ($form): bool {
@@ -235,6 +231,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
                         TextInput::make('anpr_passing')->required()
                             ->hidden(function (Get $get) use ($form): bool {
@@ -250,6 +247,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
                         TextInput::make('culprit')->required()
                             ->hidden(function (Get $get) use ($form): bool {
@@ -265,6 +263,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
                         TextInput::make('fir_number')->required()
                             ->hidden(function (Get $get) use ($form): bool {
@@ -280,22 +279,23 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
-                        TextInput::make('feedback')->required()
-                            ->hidden(function (Get $get) use ($form): bool {
-                                if ($form->getOperation() !== 'edit') {
-                                    $caseId = $get('case_id');
-                                    if (!$caseId) {
-                                        return false;
-                                    }
-                                    $recordExists = DIR::where('case_id', $caseId)->exists();
-                                    if ($recordExists) {
-                                        return true;
-                                    }
-                                } else {
-                                    return false;
-                                }
-                            }),
+                        // TextInput::make('feedback')->required()
+                        //     ->hidden(function (Get $get) use ($form): bool {
+                        //         if ($form->getOperation() !== 'edit') {
+                        //             $caseId = $get('case_id');
+                        //             if (!$caseId) {
+                        //                 return false;
+                        //             }
+                        //             $recordExists = DIR::where('case_id', $caseId)->exists();
+                        //             if ($recordExists) {
+                        //                 return true;
+                        //             }
+                        //         } else {
+                        //             return false;
+                        //         }
+                        //     }),
                         Select::make('case_nature')
                             ->hidden(function (Get $get): bool {
                                 $caseId = $get('case_id');
@@ -325,6 +325,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
                         // ->minDate(date('Y-m-d'))
                         // ->native(false),
@@ -342,6 +343,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
                         TextInput::make('caller_phone')->required()
                             ->hidden(function (Get $get) use ($form): bool {
@@ -357,6 +359,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
                         TextInput::make('camera_id')->required()
                             ->hidden(function (Get $get) use ($form): bool {
@@ -372,6 +375,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
                         TextInput::make('evidence')->required()
                             ->hidden(function (Get $get) use ($form): bool {
@@ -387,6 +391,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
                         // TextInput::make('finding_remarks')->required(),
                         TextInput::make('pco_names')->required()
@@ -403,6 +408,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
                         Radio::make('finding_remarks')->required()
                             ->options([
@@ -422,6 +428,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
                         TextArea::make('feedback')
                             ->hidden(function (Get $get) use ($form): bool {
@@ -437,6 +444,7 @@ class DIRResource extends Resource
                                 } else {
                                     return false;
                                 }
+                                return false;
                             }),
                         FileUpload::make('images')
                             ->hidden(function (Get $get): bool {

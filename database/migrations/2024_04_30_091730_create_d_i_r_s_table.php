@@ -34,7 +34,7 @@ return new class extends Migration
             $table->string('anpr_passing')->required();
             $table->string('culprit')->required();
             $table->string('fir_number')->required();
-            $table->string('feedback')->required();
+            $table->string('feedback')->nullable();
 
             $table->timestamps();
         });
