@@ -47,7 +47,6 @@ class DIRResource extends Resource
                         TextInput::make('case_id')->live()
                             ->mask('LHR-99999999-9999999')
                             ->placeholder('LHR-99999999-9999')
-
                             ->disabled(function () use ($form) {
                                 if ($form->getOperation() == 'edit') {
                                     return true;
