@@ -29,7 +29,6 @@ class DoughnutChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Blog posts created',
                     'data' => [$foundCount, $notFoundCount],
                     'backgroundColor' => ['#00FF00', '#FF0000'],
                     'borderColor' => '#9BD0F5',
@@ -43,7 +42,7 @@ class DoughnutChart extends ChartWidget
 
     public function getDescription(): ?string
     {
-        return 'The number of total DIR per month.';
+        return 'Founded and not founded Cases on this month';
     }
     protected function getType(): string
     {

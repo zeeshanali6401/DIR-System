@@ -35,7 +35,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->brandName('Punjab Police')
             ->brandLogo(asset('images/logo.png'))
-            ->brandLogoHeight('4rem')
+            ->brandLogoHeight('5rem')
             ->brandName('Filament Demo')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

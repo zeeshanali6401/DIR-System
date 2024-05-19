@@ -293,20 +293,27 @@ class DIRResource extends Resource
                         //         }
                         //     }),
                         Select::make('case_nature')
-                            ->hidden(function (Get $get): bool {
+                        ->required()->options([
+                            'Traffic Offence' => 'Traffic Offence',
+                            'Local & Special Laws' => 'Local & Special Laws',
+                            'Crime Against Person' => 'Crime Against Person',
+                            'Crime Against Property' => 'Crime Against Property'
+                        ])->searchable()
+                        ->hidden(function (Get $get) use ($form): bool {
+                            if ($form->getOperation() !== 'edit') {
                                 $caseId = $get('case_id');
-
                                 if (!$caseId) {
                                     return false;
                                 }
                                 $recordExists = DIR::where('case_id', $caseId)->exists();
-                                return $recordExists;
-                            })->required()->options([
-                                'Traffic Offence' => 'Traffic Offence',
-                                'Local & Special Laws' => 'Local & Special Laws',
-                                'Crime Against Person' => 'Crime Against Person',
-                                'Crime Against Property' => 'Crime Against Property'
-                            ])->searchable(),
+                                if ($recordExists) {
+                                    return true;
+                                }
+                            } else {
+                                return false;
+                            }
+                            return false;
+                        }),
                         DatePicker::make('case_date')
                             ->default(function () {
                                 return date('d-m-Y');
