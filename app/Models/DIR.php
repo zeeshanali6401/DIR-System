@@ -17,7 +17,6 @@ class DIR extends Model
         'case_nature',
         'location',
         'case_description',
-        'case_feedback',
         'camera_id',
         'evidence',
         'cro',

@@ -25,7 +25,6 @@ use Filament\Tables\Columns\ImageColumn;
 class DIRResource extends Resource
 {
     protected static ?string $model = DIR::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-wallet';
     protected static ?string $navigationLabel = 'DIR';
 
@@ -37,14 +36,7 @@ class DIRResource extends Resource
                     ->schema([
                         TextInput::make('case_id')->live()
                             ->mask('LHR-99999999-9999999')
-                            ->placeholder('LHR-99999999-9999')
-                            ->disabled(function () use ($form) {
-                                if ($form->getOperation() == 'edit') {
-                                    return true;
-                                } else {
-                                    false;
-                                }
-                            }),
+                            ->placeholder('LHR-99999999-9999'),
 
                         Select::make('team')->required()->alpha()
                             ->options([
@@ -78,7 +70,7 @@ class DIRResource extends Resource
                                 $shift = 'C';
                             }
                             return $shift;
-                        })
+                        })->readOnly()
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {
                                     $caseId = $get('case_id');
@@ -113,6 +105,7 @@ class DIRResource extends Resource
                                 return $recordExists;
                             })->searchable(),
                         Select::make('ps')->required()
+                        ->label('PS')
                             ->hidden(function (Get $get): bool {
                                 $caseId = $get('case_id');
 
@@ -202,6 +195,7 @@ class DIRResource extends Resource
                                 return false;
                             }),
                         TextInput::make('cro')->required()
+                        ->label('CRO')
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {
                                     $caseId = $get('case_id');
@@ -234,6 +228,7 @@ class DIRResource extends Resource
                                 return false;
                             }),
                         TextInput::make('anpr_passing')->required()
+                        ->label('ANPR Passing')
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {
                                     $caseId = $get('case_id');
@@ -266,6 +261,7 @@ class DIRResource extends Resource
                                 return false;
                             }),
                         TextInput::make('fir_number')->required()
+                        ->label('FIR Number')
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {
                                     $caseId = $get('case_id');
@@ -312,6 +308,9 @@ class DIRResource extends Resource
                                 'Crime Against Property' => 'Crime Against Property'
                             ])->searchable(),
                         DatePicker::make('case_date')
+                        ->default(function(){
+                            return date('d-m-Y');
+                        })
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {
                                     $caseId = $get('case_id');
@@ -330,6 +329,9 @@ class DIRResource extends Resource
                         // ->minDate(date('Y-m-d'))
                         // ->native(false),
                         TimePicker::make('time')->required()
+                        ->default(function(){
+                            return date('H:i:s');
+                        })
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {
                                     $caseId = $get('case_id');
@@ -445,7 +447,7 @@ class DIRResource extends Resource
                                     return false;
                                 }
                                 return false;
-                            }),
+                            })->default('pending'),
                         FileUpload::make('images')
                             ->hidden(function (Get $get): bool {
                                 $caseId = $get('case_id');
