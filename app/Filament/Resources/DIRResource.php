@@ -6,6 +6,7 @@ use App\Filament\Resources\DIRResource\Pages;
 use App\Filament\Resources\DIRResource\RelationManagers;
 use App\Models\DIR;
 use Filament\Forms;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -14,13 +15,20 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\TimePicker;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\ViewField;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Filament\Support\RawJs;
 use Filament\Tables\Columns\ImageColumn;
+use Illuminate\Support\Str;
+
 
 class DIRResource extends Resource
 {
@@ -31,12 +39,62 @@ class DIRResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $editForm = $form->getOperation() == 'edit';
         return $form
             ->schema([
                 Section::make()
                     ->schema([
-                        TextInput::make('team')->required()->alpha(),
-                        TextInput::make('shift')->required()->alpha(),
+                        TextInput::make('case_id')
+                            ->mask('LHR-99999999-9999999')
+                            ->placeholder('LHR-99999999-9999')
+                            ->live(),
+
+                        Select::make('team')->required()->alpha()
+                            ->options([
+                                'A' => 'A',
+                                'B' => 'B',
+                                'C' => 'C',
+                            ])
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
+
+                        TextInput::make('shift')->default(function () {
+                            $currentTime = date('H:i');
+                            if ($currentTime >= '06:00' && $currentTime <= '13:59') {
+                                $shift = 'A';
+                            } elseif ($currentTime >= '14:00' && $currentTime <= '21:59') {
+                                $shift = 'B';
+                            } else {
+                                $shift = 'C';
+                            }
+                            return $shift;
+                        })
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
                         Select::make('division')->required()
                             ->options([
                                 'city' => 'City',
@@ -45,8 +103,26 @@ class DIRResource extends Resource
                                 'iqbal_town' => 'Iqbal Town',
                                 'model_town' => 'Model Town',
                                 'sader' => 'Sader',
-                            ])->searchable(),
+                            ])
+                            ->hidden(function (Get $get): bool {
+                                $caseId = $get('case_id');
+
+                                if (!$caseId) {
+                                    return false;
+                                }
+                                $recordExists = DIR::where('case_id', $caseId)->exists();
+                                return $recordExists;
+                            })->searchable(),
                         Select::make('ps')->required()
+                            ->hidden(function (Get $get): bool {
+                                $caseId = $get('case_id');
+
+                                if (!$caseId) {
+                                    return false;
+                                }
+                                $recordExists = DIR::where('case_id', $caseId)->exists();
+                                return $recordExists;
+                            })
                             ->options([
                                 'shafiqabad' => 'Shafiqabad',
                                 'gowal_mandi' => 'Gowal Mandi',
@@ -94,35 +170,294 @@ class DIRResource extends Resource
                                 'ps_raiwand' => 'PS Raiwand'
                             ])->searchable(),
 
-                        Textarea::make('case_description')->required(),
-                        TextInput::make('location')->required(),
-                        Select::make('case_nature')->required()->options([
-                            'Traffic Offence' => 'Traffic Offence',
-                            'Local & Special Laws' => 'Local & Special Laws',
-                            'Crime Against Person' => 'Crime Against Person',
-                            'Crime Against Property' => 'Crime Against Property'
-                        ])->searchable(),
-                        DatePicker::make('case_date'),
+                        Textarea::make('case_description')->required()
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
+                        TextInput::make('location')->required()
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
+                        TextInput::make('cro')->required()
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
+                        TextInput::make('face_trace')->required()
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
+                        TextInput::make('anpr_passing')->required()
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
+                        TextInput::make('culprit')->required()
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
+                        TextInput::make('fir_number')->required()
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
+                        TextInput::make('feedback')->required()
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
+                        Select::make('case_nature')
+                            ->hidden(function (Get $get): bool {
+                                $caseId = $get('case_id');
+
+                                if (!$caseId) {
+                                    return false;
+                                }
+                                $recordExists = DIR::where('case_id', $caseId)->exists();
+                                return $recordExists;
+                            })->required()->options([
+                                'Traffic Offence' => 'Traffic Offence',
+                                'Local & Special Laws' => 'Local & Special Laws',
+                                'Crime Against Person' => 'Crime Against Person',
+                                'Crime Against Property' => 'Crime Against Property'
+                            ])->searchable(),
+                        DatePicker::make('case_date')
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
                         // ->minDate(date('Y-m-d'))
                         // ->native(false),
-                        TimePicker::make('time')->required(),
-                        TextInput::make('caller_phone')->required(),
-                        TextInput::make('camera_id')->required(),
-                        TextInput::make('evidence')->required(),
+                        TimePicker::make('time')->required()
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
+                        TextInput::make('caller_phone')->required()
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
+                        TextInput::make('camera_id')->required()
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
+                        TextInput::make('evidence')->required()
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
                         // TextInput::make('finding_remarks')->required(),
-                        TextInput::make('pco_names')->required(),
+                        TextInput::make('pco_names')->required()
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
                         Radio::make('finding_remarks')->required()
                             ->options([
                                 1 => 'Found',
                                 0 => 'Not Found',
-                            ]),
+                            ])
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
+                        TextArea::make('feedback')
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                            }),
                         FileUpload::make('images')
+                            ->hidden(function (Get $get): bool {
+                                $caseId = $get('case_id');
+
+                                if (!$caseId) {
+                                    return false;
+                                }
+                                $recordExists = DIR::where('case_id', $caseId)->exists();
+                                return $recordExists;
+                            })
                             ->multiple()
                             ->directory('images')
                             ->required()->image()
                             ->downloadable()
-                    ])->columns(4),
-            ]);
+                    ])->columnSpan(3)->columns(3),
+
+                Group::make()->schema([
+                    Section::make('System Details')
+                        ->extraAttributes(['style' => 'background-color:#66ff8c'])
+                        ->schema([
+                            ViewField::make('rating')
+                                ->view('pages.infolist')
+
+                        ]),
+                ])
+            ])->columns(4);
     }
 
     public static function table(Table $table): Table

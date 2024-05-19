@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('d_i_r_s', function (Blueprint $table) {
             $table->id();
+            $table->string('case_id')->unique();
             $table->string('team')->required();
             $table->string('shift')->required();
             $table->string('division')->required();
@@ -28,6 +29,13 @@ return new class extends Migration
             $table->boolean('finding_remarks')->required();
             $table->string('pco_names')->required();
             $table->string('images')->required();
+            $table->string('cro')->required();
+            $table->string('face_trace')->required();
+            $table->string('anpr_passing')->required();
+            $table->string('culprit')->required();
+            $table->string('fir_number')->required();
+            $table->string('feedback')->required();
+
             $table->timestamps();
         });
     }
