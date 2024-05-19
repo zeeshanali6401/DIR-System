@@ -35,7 +35,6 @@ return new class extends Migration
             $table->string('culprit')->required();
             $table->string('fir_number')->required();
             $table->string('feedback')->nullable();
-
             $table->timestamps();
         });
     }
