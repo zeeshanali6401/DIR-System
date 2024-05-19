@@ -44,10 +44,17 @@ class DIRResource extends Resource
             ->schema([
                 Section::make()
                     ->schema([
-                        TextInput::make('case_id')
+                        TextInput::make('case_id')->live()
                             ->mask('LHR-99999999-9999999')
                             ->placeholder('LHR-99999999-9999')
-                            ->live(),
+
+                            ->disabled(function () use ($form) {
+                                if ($form->getOperation() == 'edit') {
+                                    return true;
+                                } else {
+                                    false;
+                                }
+                            }),
 
                         Select::make('team')->required()->alpha()
                             ->options([
