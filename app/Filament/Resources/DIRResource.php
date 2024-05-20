@@ -34,7 +34,7 @@ class DIRResource extends Resource
             ->schema([
                 Section::make()
                     ->schema([
-                        TextInput::make('case_id')->live()
+                        TextInput::make('case_id')->live()->unique()
                             ->mask('LHR-99999999-9999999')
                             ->placeholder('LHR-99999999-9999'),
 
@@ -194,7 +194,12 @@ class DIRResource extends Resource
                                 }
                                 return false;
                             }),
-                        TextInput::make('cro')->required()
+                        Select::make('cro')
+                        ->options([
+                            'yes'=>'yes',
+                            'no'=>'no',
+                        ])
+                        ->required()
                             ->label('CRO')
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {
@@ -469,17 +474,17 @@ class DIRResource extends Resource
                             ->directory('images')
                             ->required()->image()
                             ->downloadable()
-                    ])->columnSpan(3)->columns(3),
+                    ])->columns(3),
 
-                Group::make()->schema([
-                    Section::make('System Details')
-                        ->extraAttributes(['style' => 'background-color:#66ff8c'])
-                        ->schema([
-                            ViewField::make('rating')
-                                ->view('pages.infolist')
+                // Group::make()->schema([
+                //     Section::make('System Details')
+                //         ->extraAttributes(['style' => 'background-color:#66ff8c'])
+                //         ->schema([
+                //             ViewField::make('rating')
+                //                 ->view('pages.infolist')
 
-                        ]),
-                ])
+                //         ]),
+                // ])
             ])->columns(4);
     }
 

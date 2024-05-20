@@ -9,15 +9,7 @@ class BarChart extends ChartWidget
 {
     protected static ?string $heading = 'Case Nature wise Chart';
     protected static ?int $sort = 1;
-    protected function getFilters(): ?array
-    {
-        return [
-            'today' => 'Today',
-            'week' => 'Last week',
-            'month' => 'Last month',
-            'year' => 'This year',
-        ];
-    }
+
 
     protected function getData(): array
     {
