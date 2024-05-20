@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\DIRResource\Pages;
 
 use App\Filament\Exports\DirPendingExporter;
+use App\Filament\Exports\PendingExporter;
 use App\Filament\Resources\DIRResource;
 use Filament\Actions;
 use Filament\Actions\ExportAction as ActionsExportAction;
@@ -26,7 +27,7 @@ class ListDIRS extends ListRecords
             ExportAction::make()
                 ->exports([
                     ExcelExport::make()
-                        ->fromTable()
+                        ->label('Full Export')
                         ->withFilename(date('d-m-Y'))
                         ->withWriterType(\Maatwebsite\Excel\Excel::CSV)
                         ->withColumns([
@@ -43,10 +44,33 @@ class ListDIRS extends ListRecords
                             Column::make('camera_id'),
                             Column::make('evidence'),
                             Column::make('finding_remarks'),
-                            Column::make('pco_names')
-
+                            Column::make('pco_names'),
+                            Column::make('feedback')
+                        ]),
+                        ExcelExport::make()->label('Pending DIR Exoport')
+                        ->withFilename(date('d-m-Y'))
+                        ->withWriterType(\Maatwebsite\Excel\Excel::CSV)
+                        ->withColumns([
+                            Column::make('team'),
+                            Column::make('shift'),
+                            Column::make('division'),
+                            Column::make('ps'),
+                            Column::make('case_nature'),
+                            Column::make('time'),
+                            Column::make('case_date'),
+                            Column::make('caller_phone'),
+                            Column::make('case_description'),
+                            Column::make('location'),
+                            Column::make('camera_id'),
+                            Column::make('evidence'),
+                            Column::make('finding_remarks'),
+                            Column::make('pco_names'),
+                            Column::make('feedback')
                         ])
+                        ->modifyQueryUsing(fn ($query) => $query->where('feedback', 'Pending'))
                 ]),
+
+
         ];
     }
 }
