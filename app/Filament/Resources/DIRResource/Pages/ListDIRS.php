@@ -2,12 +2,15 @@
 
 namespace App\Filament\Resources\DIRResource\Pages;
 
+use App\Filament\Exports\DirPendingExporter;
 use App\Filament\Resources\DIRResource;
 use Filament\Actions;
+use Filament\Actions\ExportAction as ActionsExportAction;
 use Filament\Resources\Pages\ListRecords;
 use pxlrbt\FilamentExcel\Columns\Column;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use pxlrbt\FilamentExcel\Actions\Pages\ExportAction;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListDIRS extends ListRecords
 {
@@ -23,7 +26,7 @@ class ListDIRS extends ListRecords
             ExportAction::make()
                 ->exports([
                     ExcelExport::make()
-                        // ->fromTable()
+                        ->fromTable()
                         ->withFilename(date('d-m-Y'))
                         ->withWriterType(\Maatwebsite\Excel\Excel::CSV)
                         ->withColumns([
@@ -42,7 +45,7 @@ class ListDIRS extends ListRecords
                             Column::make('finding_remarks'),
                             Column::make('pco_names')
 
-                            ])
+                        ])
                 ]),
         ];
     }
