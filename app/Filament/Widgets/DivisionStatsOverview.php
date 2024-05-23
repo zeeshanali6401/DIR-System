@@ -39,7 +39,7 @@ class DivisionStatsOverview extends BaseWidget
                 ->count())
                 ->description('All Model Town DIRs')
                 ->color('success'),
-                Stat::make('Cantt', DIR::where('division', 'cant')
+                Stat::make('Cantt', DIR::where('division', 'cantt')
                 ->whereDate('created_at', $currentDate)
                 ->count())
                 ->description('All Cantt DIRs')

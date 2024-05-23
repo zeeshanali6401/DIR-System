@@ -20,10 +20,16 @@ class DIRFactory extends Factory
     public function definition(): array
     {
         return [
+            'case_id' => $this->faker->regexify('LHR-\d{8}-\d{7}'),
             'team' => $this->faker->randomElement(['A', 'B', 'C']),
             'shift' => $this->faker->randomElement(['Morning', 'Afternoon', 'Night']),
+            'cro' => $this->faker->randomElement(['yes', 'no']),
+            'face_trace' => $this->faker->randomElement(['yes', 'no']),
+            'anpr_passing' => $this->faker->randomElement(['yes', 'no']),
             'division' => $this->faker->randomElement(['City', 'Civil_lines', 'iqbal_town', 'model_town', 'cantt', 'sader']),
             'ps' => $this->faker->word,
+            'fir_number' => $this->faker->randomNumber(4, true),
+            'culprit' => $this->faker->randomElement(['yes', 'no']),
             'case_nature' => $this->faker->randomElement(['Traffic Offence', 'Local & Special Laws', 'Crime Against Person', 'Crime Against Property']),
             'case_date' => $this->faker->dateTimeThisYear()->format('Y-m-d'),
             'time' => $this->faker->time(),
@@ -35,6 +41,7 @@ class DIRFactory extends Factory
             'finding_remarks' => $this->faker->boolean,
             'pco_names' => $this->faker->name,
             'images' => $this->faker->text,
+            'feedback' => $this->faker->randomElement(['pending', 'good', 'bad', 'important', 'not important']),
 
         ];
     }

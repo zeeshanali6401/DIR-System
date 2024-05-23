@@ -18,8 +18,7 @@ class ListDIRS extends ListRecords
     protected static string $resource = DIRResource::class;
     protected static ?string $title = 'DIR';
     protected ?string $heading = 'Daily Investigation Report';
-
-
+    
     protected function getHeaderActions(): array
     {
         return [
@@ -32,6 +31,10 @@ class ListDIRS extends ListRecords
                         ->withWriterType(\Maatwebsite\Excel\Excel::CSV)
                         ->withColumns([
                             Column::make('team'),
+                            Column::make('case_id'),
+                            Column::make('culprit'),
+                            Column::make('anpr_passing'),
+                            Column::make('cro'),
                             Column::make('shift'),
                             Column::make('division'),
                             Column::make('ps'),
@@ -52,6 +55,10 @@ class ListDIRS extends ListRecords
                         ->withWriterType(\Maatwebsite\Excel\Excel::CSV)
                         ->withColumns([
                             Column::make('team'),
+                            Column::make('case_id'),
+                            Column::make('culprit'),
+                            Column::make('anpr_passing'),
+                            Column::make('cro'),
                             Column::make('shift'),
                             Column::make('division'),
                             Column::make('ps'),
@@ -73,4 +80,5 @@ class ListDIRS extends ListRecords
 
         ];
     }
+
 }

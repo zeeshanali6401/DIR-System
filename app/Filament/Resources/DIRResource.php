@@ -20,7 +20,11 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\ViewField;
 use Filament\Forms\Get;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Builder;
 
 class DIRResource extends Resource
 {
@@ -33,8 +37,28 @@ class DIRResource extends Resource
         return $form
             ->schema([
                 Section::make()
+                    ->description(function (Get $get) use ($form) {
+                        if ($form->getOperation() !== 'edit') {
+                            $caseId = $get('case_id');
+                            $record = DIR::where('case_id', $caseId)->first();
+
+                            if ($record) {
+                                $name = $record->pco_names; // Assuming the 'name' column exists in the 'DIR' model
+                                return "DIR is already created by: $name";
+                            }
+                        }
+                    })
                     ->schema([
-                        TextInput::make('case_id')->live()->unique()
+                        TextInput::make('case_id')->live()->unique(function () use ($form) {
+                            if ($form->getOperation() === 'edit') {
+                                return false;
+                            }
+                        })
+                            ->disabled(function () use ($form) {
+                                if ($form->getOperation() === 'edit') {
+                                    return true;
+                                }
+                            })
                             ->mask('LHR-99999999-9999999')
                             ->placeholder('LHR-99999999-9999'),
 
@@ -89,7 +113,7 @@ class DIRResource extends Resource
                         Select::make('division')->required()
                             ->options([
                                 'city' => 'City',
-                                'cant' => 'Cant',
+                                'cantt' => 'Cantt',
                                 'civil_lines' => 'Civil Lines',
                                 'iqbal_town' => 'Iqbal Town',
                                 'model_town' => 'Model Town',
@@ -195,11 +219,11 @@ class DIRResource extends Resource
                                 return false;
                             }),
                         Select::make('cro')
-                        ->options([
-                            'yes'=>'yes',
-                            'no'=>'no',
-                        ])
-                        ->required()
+                            ->options([
+                                'yes' => 'yes',
+                                'no' => 'no',
+                            ])
+                            ->required()
                             ->label('CRO')
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {
@@ -298,27 +322,27 @@ class DIRResource extends Resource
                         //         }
                         //     }),
                         Select::make('case_nature')
-                        ->required()->options([
-                            'Traffic Offence' => 'Traffic Offence',
-                            'Local & Special Laws' => 'Local & Special Laws',
-                            'Crime Against Person' => 'Crime Against Person',
-                            'Crime Against Property' => 'Crime Against Property'
-                        ])->searchable()
-                        ->hidden(function (Get $get) use ($form): bool {
-                            if ($form->getOperation() !== 'edit') {
-                                $caseId = $get('case_id');
-                                if (!$caseId) {
+                            ->required()->options([
+                                'Traffic Offence' => 'Traffic Offence',
+                                'Local & Special Laws' => 'Local & Special Laws',
+                                'Crime Against Person' => 'Crime Against Person',
+                                'Crime Against Property' => 'Crime Against Property'
+                            ])->searchable()
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
                                     return false;
                                 }
-                                $recordExists = DIR::where('case_id', $caseId)->exists();
-                                if ($recordExists) {
-                                    return true;
-                                }
-                            } else {
                                 return false;
-                            }
-                            return false;
-                        }),
+                            }),
                         DatePicker::make('case_date')
                             ->default(function () {
                                 return date('d-m-Y');
@@ -492,7 +516,7 @@ class DIRResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('team')->sortable(),
+                TextColumn::make('team')->sortable()->searchable(),
                 TextColumn::make('shift')->sortable(),
                 ImageColumn::make('images')->circular()
                     ->stacked(),
@@ -501,23 +525,54 @@ class DIRResource extends Resource
                         return $record->finding_remarks == 1 ? 'Found' : 'Not Found';
                     })->badge()
                     ->color(fn (string $state): string => $state == 'Found' ? 'success' : 'danger'),
-                TextColumn::make('division')->sortable(),
-                TextColumn::make('ps')->sortable(),
+                TextColumn::make('division')->sortable()->searchable(),
+                TextColumn::make('ps')->sortable()->searchable(),
                 TextColumn::make('case_nature')->sortable(),
                 TextColumn::make('case_date')->label('Date'),
                 TextColumn::make('time')->sortable(),
-                TextColumn::make('caller_phone'),
+                TextColumn::make('caller_phone')->searchable(),
                 TextColumn::make('case_description'),
-                TextColumn::make('location'),
-                TextColumn::make('camera_id'),
-                TextColumn::make('evidence'),
+                TextColumn::make('location')->searchable(),
+                TextColumn::make('camera_id')->searchable(),
+                TextColumn::make('evidence')->searchable(),
                 // TextColumn::make('finding_remarks')->sortable(),
                 TextColumn::make('pco_names'),
 
             ])
             ->filters([
-                //
-            ])
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('created_from'),
+                        DatePicker::make('created_until'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                            )
+                            ->when(
+                                $data['created_until'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                            );
+                    }),
+                SelectFilter::make('finding_remarks')
+                    ->options([
+                        1 => 'Found',
+                        0 => 'Not Found',
+                    ]),
+                SelectFilter::make('case_nature')
+                    ->options([
+                        'Crime Against Property' => 'Crime Against Property',
+                        'Local & Special Laws' => 'Local & Special Laws',
+                        'Crime Against Person' => 'Crime Against Person',
+                        'Traffic Offence' => 'Traffic Offence'
+                    ]),
+                SelectFilter::make('ps')
+                    ->options(DIR::all()->pluck('ps', 'ps')),
+
+
+            ])->filtersFormMaxHeight('300px')
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
