@@ -10,6 +10,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\TimePicker;
@@ -343,31 +344,8 @@ class DIRResource extends Resource
                                 }
                                 return false;
                             }),
-                        DatePicker::make('case_date')
-                            ->default(function () {
-                                return date('d-m-Y');
-                            })
-                            ->hidden(function (Get $get) use ($form): bool {
-                                if ($form->getOperation() !== 'edit') {
-                                    $caseId = $get('case_id');
-                                    if (!$caseId) {
-                                        return false;
-                                    }
-                                    $recordExists = DIR::where('case_id', $caseId)->exists();
-                                    if ($recordExists) {
-                                        return true;
-                                    }
-                                } else {
-                                    return false;
-                                }
-                                return false;
-                            }),
-                        // ->minDate(date('Y-m-d'))
-                        // ->native(false),
-                        TimePicker::make('time')->required()
-                            ->default(function () {
-                                return date('H:i:s');
-                            })
+                        DateTimePicker::make('case_date_time')
+                            ->timezone('Asia/Karachi')
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {
                                     $caseId = $get('case_id');
@@ -528,8 +506,7 @@ class DIRResource extends Resource
                 TextColumn::make('division')->sortable()->searchable(),
                 TextColumn::make('ps')->sortable()->searchable(),
                 TextColumn::make('case_nature')->sortable(),
-                TextColumn::make('case_date')->label('Date'),
-                TextColumn::make('time')->sortable(),
+                TextColumn::make('case_date_time')->label('Date'),
                 TextColumn::make('caller_phone')->searchable(),
                 TextColumn::make('case_description'),
                 TextColumn::make('location')->searchable(),
@@ -540,7 +517,7 @@ class DIRResource extends Resource
 
             ])
             ->filters([
-                Filter::make('created_at')
+                Filter::make('case_date_time')
                     ->form([
                         DatePicker::make('created_from'),
                         DatePicker::make('created_until'),
@@ -549,11 +526,11 @@ class DIRResource extends Resource
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                                fn (Builder $query, $date): Builder => $query->whereDate('case_date_time', '>=', $date),
                             )
                             ->when(
                                 $data['created_until'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                                fn (Builder $query, $date): Builder => $query->whereDate('case_date_time', '<=', $date),
                             );
                     }),
                 SelectFilter::make('finding_remarks')

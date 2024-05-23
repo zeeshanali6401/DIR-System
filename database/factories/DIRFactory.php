@@ -31,7 +31,7 @@ class DIRFactory extends Factory
             'fir_number' => $this->faker->randomNumber(4, true),
             'culprit' => $this->faker->randomElement(['yes', 'no']),
             'case_nature' => $this->faker->randomElement(['Traffic Offence', 'Local & Special Laws', 'Crime Against Person', 'Crime Against Property']),
-            'case_date' => $this->faker->dateTimeThisYear()->format('Y-m-d'),
+            'case_date_time' => $this->faker->dateTimeThisYear(),
             'time' => $this->faker->time(),
             'caller_phone' => '+92' . substr($this->faker->numerify('##########'), 0, 10),
             'case_description' => $this->faker->sentence,

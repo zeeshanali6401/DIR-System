@@ -18,7 +18,7 @@ class ListDIRS extends ListRecords
     protected static string $resource = DIRResource::class;
     protected static ?string $title = 'DIR';
     protected ?string $heading = 'Daily Investigation Report';
-    
+
     protected function getHeaderActions(): array
     {
         return [
@@ -40,7 +40,7 @@ class ListDIRS extends ListRecords
                             Column::make('ps'),
                             Column::make('case_nature'),
                             Column::make('time'),
-                            Column::make('case_date'),
+                            Column::make('case_date_time'),
                             Column::make('caller_phone'),
                             Column::make('case_description'),
                             Column::make('location'),
@@ -64,7 +64,7 @@ class ListDIRS extends ListRecords
                             Column::make('ps'),
                             Column::make('case_nature'),
                             Column::make('time'),
-                            Column::make('case_date'),
+                            Column::make('case_date_time'),
                             Column::make('caller_phone'),
                             Column::make('case_description'),
                             Column::make('location'),

@@ -9,41 +9,61 @@ class BarChart extends ChartWidget
 {
     protected static ?string $heading = 'Case Nature wise Chart';
     protected static ?int $sort = 1;
+    public ?string $filter = 'today';
 
-
+    protected function getFilters(): ?array
+    {
+        return [
+            'today' => 'Today',
+            'week' => 'Last week',
+            'month' => 'Last month',
+            'year' => 'This year',
+        ];
+    }
     protected function getData(): array
     {
         $activeFilter = $this->filter;
+        $caseNatureCounts = [];
 
-        $caseNatureCounts = DIR::query()
-            ->whereIn('case_nature', ['Traffic Offence', 'Local & Special Laws', 'Crime Against Person', 'Crime Against Property'])
-            ->selectRaw('case_nature, count(*) as count')
-            ->groupBy('case_nature')
-            ->pluck('count', 'case_nature')
-            ->toArray();
+        // Define date ranges based on the filter
+        switch ($activeFilter) {
+            case 'today':
+                $startDate = now()->startOfDay();
+                $endDate = now()->endOfDay();
+                break;
+            case 'week':
+                $startDate = now()->startOfWeek();
+
+                $endDate = now()->endOfWeek();
+                break;
+            case 'month':
+                $startDate = now()->startOfMonth();
+                $endDate = now()->endOfMonth();
+                break;
+            case 'year':
+                $startDate = now()->startOfYear();
+                $endDate = now()->endOfYear();
+                break;
+            default:
+                $startDate = null;
+                $endDate = null;
+                break;
+        }
+
+        if ($startDate && $endDate) {
+            $caseNatureCounts = DIR::query()
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->whereIn('case_nature', ['Traffic Offence', 'Local & Special Laws', 'Crime Against Person', 'Crime Against Property'])
+                ->selectRaw('case_nature, count(*) as count')
+                ->groupBy('case_nature')
+                ->pluck('count', 'case_nature')
+                ->toArray();
+        }
 
         $datasets = [
             [
                 'label' => 'DIRs',
                 'data' => array_values($caseNatureCounts),
-                // 'backgroundColor' => [
-                //     'rgba(255, 99, 132, 0.2)',
-                //     'rgba(255, 159, 64, 0.2)',
-                //     'rgba(255, 205, 86, 0.2)',
-                //     'rgba(75, 192, 192, 0.2)',
-                //     'rgba(54, 162, 235, 0.2)',
-                //     'rgba(153, 102, 255, 0.2)',
-                //     'rgba(201, 203, 207, 0.2)'
-                // ],
-                // 'borderColor' => [
-                //     'rgb(255, 99, 132)',
-                //     'rgb(255, 159, 64)',
-                //     'rgb(255, 205, 86)',
-                //     'rgb(75, 192, 192)',
-                //     'rgb(54, 162, 235)',
-                //     'rgb(153, 102, 255)',
-                //     'rgb(201, 203, 207)'
-                // ],
                 'maxBarThickness' => 40,
                 'borderWidth' => 2,
                 'borderRadius' => 10,
@@ -54,6 +74,7 @@ class BarChart extends ChartWidget
 
         return compact('datasets', 'labels');
     }
+
 
 
     protected function getType(): string

@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Seeders;
+namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -21,6 +22,6 @@ class DatabaseSeeder extends Seeder
                 'email' => 'admin@admin.com',
                 'password' => Hash::make('12345678'),
             ]);
-            $this->call([DIRTableSeeder::class]);
+            // $this->call([DIRTableSeeder::class]);
     }
 }

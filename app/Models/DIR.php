@@ -11,7 +11,7 @@ class DIR extends Model
     protected $fillable = [
         'case_id',
         'caller_phone',
-        'case_date',
+        'case_date_time',
         'time',
         'ps',
         'case_nature',
