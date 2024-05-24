@@ -1,39 +1,36 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Supervisor\Resources;
 
-use App\Filament\Resources\DIRResource\Pages;
+use App\Filament\Supervisor\Resources\DIRResource\Pages;
 use App\Models\DIR;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\TimePicker;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\ViewField;
 use Filament\Forms\Get;
-use Filament\Notifications\Notification;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
-use Illuminate\Database\Eloquent\Builder;
+
 
 class DIRResource extends Resource
 {
     protected static ?string $model = DIR::class;
-    protected static ?string $navigationIcon = 'heroicon-o-wallet';
-    protected static ?string $navigationLabel = 'DIR';
+
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
@@ -592,7 +589,7 @@ class DIRResource extends Resource
         return [
             'index' => Pages\ListDIRS::route('/'),
             'create' => Pages\CreateDIR::route('/create'),
-            // 'edit' => Pages\EditDIR::route('/{record}/edit')
+            // 'edit' => Pages\EditDIR::route('/{record}/edit'),
         ];
     }
 }

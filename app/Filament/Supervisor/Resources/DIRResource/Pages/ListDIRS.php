@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\DIRResource\Pages;
+namespace App\Filament\Supervisor\Resources\DIRResource\Pages;
 
 use App\Filament\Exports\DirPendingExporter;
 use App\Filament\Exports\PendingExporter;

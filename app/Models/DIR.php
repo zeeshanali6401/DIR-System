@@ -35,6 +35,7 @@ class DIR extends Model
         'user_ip',
         'user_hostname',
         'status',
+        'user_email'
     ];
     protected $casts = [
         'images' => 'array',
