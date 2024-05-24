@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Supervisor\Resources\DIRResource\Pages;
+namespace App\Filament\Pco\Resources\DIRResource\Pages;
 
-use App\Filament\Supervisor\Resources\DIRResource;
+use App\Filament\Pco\Resources\DIRResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 

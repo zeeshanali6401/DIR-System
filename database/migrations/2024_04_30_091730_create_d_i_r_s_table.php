@@ -38,7 +38,7 @@ return new class extends Migration
             $table->string('user_ip')->required();
             $table->string('user_hostname')->required();
             $table->string('status')->boolean()->default(0);
-            $table->string('user_email')->unique();
+            $table->string('user_email')->required();
             $table->timestamps();
         });
     }

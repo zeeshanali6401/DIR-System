@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Supervisor\Resources;
+namespace App\Filament\Pco\Resources;
 
-use App\Filament\Supervisor\Resources\DIRResource\Pages;
-use App\Filament\Supervisor\Resources\DIRResource\RelationManagers;
+use App\Filament\Pco\Resources\DIRResource\Pages;
+use App\Filament\Pco\Resources\DIRResource\RelationManagers;
 use App\Models\DIR;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;

@@ -28,6 +28,7 @@ class PcoPanelProvider extends PanelProvider
             ->path('pco')
             ->login(Login::class)
             ->authGuard('pco')
+            ->spa()
             ->colors([
                 'primary' => Color::Amber,
             ])
