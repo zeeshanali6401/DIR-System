@@ -5,6 +5,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Supervisor;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +23,13 @@ class DatabaseSeeder extends Seeder
                 'email' => 'admin@admin.com',
                 'password' => Hash::make('12345678'),
             ]);
+            Supervisor::create(
+                [
+                    'name' => 'Supervisor',
+                    'username'=>'supervisor@supervisor.com',
+                    'email' => 'supervisor@supervisor.com',
+                    'password' => Hash::make('12345678'),
+                ]);
             // $this->call([DIRTableSeeder::class]);
     }
 }
