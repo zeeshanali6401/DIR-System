@@ -26,43 +26,43 @@ class DoughnutChart extends ChartWidget
     }
 
     protected function getData(): array
-{
-    $activeFilter = $this->filter;
-    $query = DIR::query();
-    $now = now();
+    {
+        $activeFilter = $this->filter;
+        $query = DIR::query();
+        $now = now();
 
-    if ($activeFilter === 'today') {
-        $query->whereDate('case_date_time', $now);
-    } elseif ($activeFilter === 'last_month') {
-        $oneMonthAgo = $now->copy()->subMonth();
-        $query->where('case_date_time', '>=', $oneMonthAgo);
-    } elseif ($activeFilter === 'last_six_months') {
-        $sixMonthsAgo = $now->copy()->subMonths(6);
-        $query->where('case_date_time', '>=', $sixMonthsAgo);
-    } elseif ($activeFilter === 'year') {
-        // Calculate the date one year ago from now
-        $oneYearAgo = $now->copy()->subYear();
-        // Filter records within the last year
-        $query->where('case_date_time', '>=', $oneYearAgo);
-    } else {
-        $query->whereMonth('case_date_time', $now->month)->whereYear('case_date_time', $now->year);
-    }
-    // Count the found and not found records
-    $foundCount = (clone $query)->where('finding_remarks', 1)->count();
-    $notFoundCount = (clone $query)->where('finding_remarks', 0)->count();
+        if ($activeFilter === 'today') {
+            $query->whereDate('case_date_time', $now);
+        } elseif ($activeFilter === 'last_month') {
+            $oneMonthAgo = $now->copy()->subMonth();
+            $query->where('case_date_time', '>=', $oneMonthAgo);
+        } elseif ($activeFilter === 'last_six_months') {
+            $sixMonthsAgo = $now->copy()->subMonths(6);
+            $query->where('case_date_time', '>=', $sixMonthsAgo);
+        } elseif ($activeFilter === 'year') {
+            // Calculate the date one year ago from now
+            $oneYearAgo = $now->copy()->subYear();
+            // Filter records within the last year
+            $query->where('case_date_time', '>=', $oneYearAgo);
+        } else {
+            $query->whereMonth('case_date_time', $now->month)->whereYear('case_date_time', $now->year);
+        }
+        // Count the found and not found records
+        $foundCount = (clone $query)->where('finding_remarks', 1)->count();
+        $notFoundCount = (clone $query)->where('finding_remarks', 0)->count();
 
-    return [
-        'datasets' => [
-            [
-                'data' => [$foundCount, $notFoundCount],
-                'backgroundColor' => ['#00FF00', '#FF0000'],
-                'borderColor' => '#9BD0F5',
-                'hoverOffset' => 30,
+        return [
+            'datasets' => [
+                [
+                    'data' => [$foundCount, $notFoundCount],
+                    'backgroundColor' => ['#00FF00', '#FF0000'],
+                    'borderColor' => '#9BD0F5',
+                    'hoverOffset' => 30,
+                ],
             ],
-        ],
-        'labels' => ['Found', 'Not Found'],
-    ];
-}
+            'labels' => ['Found', 'Not Found'],
+        ];
+    }
 
 
 

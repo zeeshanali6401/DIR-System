@@ -13,6 +13,6 @@ class DIRTableSeeder extends Seeder
      */
     public function run()
     {
-        DIR::factory()->count(40)->create();
+        DIR::factory()->count(10)->create();
     }
 }

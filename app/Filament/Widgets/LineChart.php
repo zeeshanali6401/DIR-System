@@ -9,7 +9,7 @@ use Filament\Widgets\ChartWidget;
 class LineChart extends ChartWidget
 {
     protected static ?int $sort = 2;
-    protected static ?string $heading = 'Cases';
+    protected static ?string $heading = 'Total DIR Counts of this year';
     protected static string $color = 'info';
     protected function getData(): array
     {

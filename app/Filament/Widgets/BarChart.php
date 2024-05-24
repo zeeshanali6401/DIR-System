@@ -15,50 +15,45 @@ class BarChart extends ChartWidget
     {
         return [
             'today' => 'Today',
-            'week' => 'Last week',
-            'month' => 'Last month',
+            'last_month' => 'Last month',
+            'last_six_months' => 'Last 6 months',
             'year' => 'This year',
         ];
     }
+
     protected function getData(): array
     {
         $activeFilter = $this->filter;
-        $caseNatureCounts = [];
+        $query = DIR::query();
+        $now = now();
 
-        // Define date ranges based on the filter
         switch ($activeFilter) {
             case 'today':
-                $startDate = now()->startOfDay();
-                $endDate = now()->endOfDay();
+                $query->whereDate('case_date_time', $now);
                 break;
-            case 'week':
-                $startDate = now()->startOfWeek();
-
-                $endDate = now()->endOfWeek();
+            case 'last_month':
+                $oneMonthAgo = $now->copy()->subMonth();
+                $query->where('case_date_time', '>=', $oneMonthAgo);
                 break;
-            case 'month':
-                $startDate = now()->startOfMonth();
-                $endDate = now()->endOfMonth();
+            case 'last_six_months':
+                $sixMonthsAgo = $now->copy()->subMonths(6);
+                $query->where('case_date_time', '>=', $sixMonthsAgo);
                 break;
             case 'year':
-                $startDate = now()->startOfYear();
-                $endDate = now()->endOfYear();
+                $oneYearAgo = $now->copy()->subYear();
+                $query->where('case_date_time', '>=', $oneYearAgo);
                 break;
             default:
-                $startDate = null;
-                $endDate = null;
+                $query->whereMonth('case_date_time', $now->month)->whereYear('case_date_time', $now->year);
                 break;
         }
 
-        if ($startDate && $endDate) {
-            $caseNatureCounts = DIR::query()
-                ->whereBetween('created_at', [$startDate, $endDate])
-                ->whereIn('case_nature', ['Traffic Offence', 'Local & Special Laws', 'Crime Against Person', 'Crime Against Property'])
-                ->selectRaw('case_nature, count(*) as count')
-                ->groupBy('case_nature')
-                ->pluck('count', 'case_nature')
-                ->toArray();
-        }
+        $caseNatureCounts = $query
+            ->whereIn('case_nature', ['Traffic Offence', 'Local & Special Laws', 'Crime Against Person', 'Crime Against Property'])
+            ->selectRaw('case_nature, count(*) as count')
+            ->groupBy('case_nature')
+            ->pluck('count', 'case_nature')
+            ->toArray();
 
         $datasets = [
             [
@@ -74,6 +69,7 @@ class BarChart extends ChartWidget
 
         return compact('datasets', 'labels');
     }
+
 
 
 
