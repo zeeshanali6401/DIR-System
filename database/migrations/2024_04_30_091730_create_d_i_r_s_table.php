@@ -37,6 +37,7 @@ return new class extends Migration
             $table->string('user_id')->required();
             $table->string('user_ip')->required();
             $table->string('user_hostname')->required();
+            $table->string('status')->boolean()->default(0);
             $table->timestamps();
         });
     }

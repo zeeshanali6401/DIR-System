@@ -33,7 +33,8 @@ class DIR extends Model
         'images',
         'user_id',
         'user_ip',
-        'user_hostname'
+        'user_hostname',
+        'status',
     ];
     protected $casts = [
         'images' => 'array',

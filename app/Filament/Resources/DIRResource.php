@@ -23,6 +23,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\ViewField;
 use Filament\Forms\Get;
 use Filament\Notifications\Notification;
+use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -512,6 +513,7 @@ class DIRResource extends Resource
                         return $record->finding_remarks == 1 ? 'Found' : 'Not Found';
                     })->badge()
                     ->color(fn (string $state): string => $state == 'Found' ? 'success' : 'danger'),
+                CheckboxColumn::make('status')->label('Valid'),
                 TextColumn::make('division')->sortable()->searchable(),
                 TextColumn::make('ps')->sortable()->searchable(),
                 TextColumn::make('case_nature')->sortable(),
@@ -521,6 +523,7 @@ class DIRResource extends Resource
                 TextColumn::make('location')->searchable(),
                 TextColumn::make('camera_id')->searchable(),
                 TextColumn::make('evidence')->searchable(),
+
                 // TextColumn::make('finding_remarks')->sortable(),
                 TextColumn::make('pco_names'),
 
