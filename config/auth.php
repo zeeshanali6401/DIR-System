@@ -44,6 +44,10 @@ return [
             'driver' => 'session',
             'provider' => 'supervisor',
         ],
+        'pco' => [
+            'driver' => 'session',
+            'provider' => 'pco',
+        ],
     ],
 
     /*
@@ -71,6 +75,10 @@ return [
         'supervisor' => [
             'driver' => 'eloquent',
             'model' => App\Models\Supervisor::class,
+        ],
+        'pco' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\PCO::class,
         ],
         // 'users' => [
         //     'driver' => 'database',
