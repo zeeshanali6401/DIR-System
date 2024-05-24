@@ -28,6 +28,12 @@ class SupervisorPanelProvider extends PanelProvider
             ->path('supervisor')
             ->spa()
             ->login(Login::class)
+            ->sidebarWidth('12rem')
+            ->brandLogoHeight('5rem')
+            ->brandName('Punjab Police')
+            ->brandLogo(asset('images/logo.png'))
+            ->passwordReset()
+            ->profile()
             ->authGuard('supervisor')
             ->colors([
                 'primary' => Color::Amber,
