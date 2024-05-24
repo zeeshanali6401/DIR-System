@@ -13,6 +13,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TimePicker;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Select;
@@ -50,6 +51,12 @@ class DIRResource extends Resource
                         }
                     })
                     ->schema([
+                        Hidden::make('user_ip')
+                            ->default(getHostByName(php_uname('n'))),
+                        Hidden::make('user_hostname')
+                            ->default(getHostByName(php_uname('getHostName'))),
+                        Hidden::make('user_id')
+                            ->default(auth()->user()->id),
                         TextInput::make('case_id')->live()->unique(function () use ($form) {
                             if ($form->getOperation() === 'edit') {
                                 return false;
@@ -84,7 +91,6 @@ class DIRResource extends Resource
                                 }
                                 return false;
                             }),
-
                         TextInput::make('shift')->default(function () {
                             $currentTime = date('H:i');
                             if ($currentTime >= '06:00' && $currentTime <= '13:59') {
@@ -493,6 +499,9 @@ class DIRResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+        ->recordAction(null)
+        ->defaultSort('created_at', 'desc')
+        ->striped()
             ->columns([
                 TextColumn::make('team')->sortable()->searchable(),
                 TextColumn::make('shift')->sortable(),

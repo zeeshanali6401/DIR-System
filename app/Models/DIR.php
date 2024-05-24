@@ -31,6 +31,9 @@ class DIR extends Model
         'division',
         'pco_names',
         'images',
+        'user_id',
+        'user_ip',
+        'user_hostname'
     ];
     protected $casts = [
         'images' => 'array',

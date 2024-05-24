@@ -41,6 +41,9 @@ class DIRFactory extends Factory
             'pco_names' => $this->faker->name,
             'images' => $this->faker->text,
             'feedback' => $this->faker->randomElement(['pending', 'good', 'bad', 'important', 'not important']),
+            'user_id' => 1,
+            'user_ip' => $this->faker->ipv4,
+            'user_hostname' => $this->faker->domainName,
 
         ];
     }

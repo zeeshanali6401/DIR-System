@@ -34,6 +34,9 @@ return new class extends Migration
             $table->string('culprit')->required();
             $table->string('fir_number')->required();
             $table->string('feedback')->nullable();
+            $table->string('user_id')->required();
+            $table->string('user_ip')->required();
+            $table->string('user_hostname')->required();
             $table->timestamps();
         });
     }
