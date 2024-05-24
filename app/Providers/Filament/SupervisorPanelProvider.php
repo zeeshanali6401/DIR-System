@@ -26,6 +26,7 @@ class SupervisorPanelProvider extends PanelProvider
         return $panel
             ->id('supervisor')
             ->path('supervisor')
+            ->spa()
             ->login(Login::class)
             ->authGuard('supervisor')
             ->colors([
