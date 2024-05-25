@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\DIRResource\Pages;
+namespace App\Filament\Supervisor\Resources\DIRResource\Pages;
 
-use App\Filament\Resources\DIRResource;
+use App\Filament\Supervisor\Resources\DIRResource;
+use Filament\Actions;
 use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\Section;
