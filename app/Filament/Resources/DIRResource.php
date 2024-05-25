@@ -571,6 +571,7 @@ class DIRResource extends Resource
 
             ])->filtersFormMaxHeight('300px')
             ->actions([
+                Tables\Actions\Action::make('View')->color('success')->icon('heroicon-o-eye')->url(fn (DIR $record): string =>  self::getUrl('ViewDirRecord', ['record' => $record])),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
@@ -593,6 +594,8 @@ class DIRResource extends Resource
             'index' => Pages\ListDIRS::route('/'),
             'create' => Pages\CreateDIR::route('/create'),
             // 'edit' => Pages\EditDIR::route('/{record}/edit')
+            'ViewDirRecord' => Pages\ViewDirRecord::route('/{record}/ViewDirRecord'),
         ];
     }
 }
+
