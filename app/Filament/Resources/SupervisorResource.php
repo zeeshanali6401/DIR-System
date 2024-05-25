@@ -45,7 +45,7 @@ class SupervisorResource extends Resource
                 TextColumn::make('name'),
                 TextColumn::make('username'),
                 TextColumn::make('designation'),
-                TextColumn::make('role')
+                TextColumn::make('roles.name')
             ])
             ->filters([
                 //

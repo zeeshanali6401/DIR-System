@@ -25,17 +25,17 @@ class PCOResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-        ->schema([
-            TextInput::make('name')->maxLength(255)->required(),
-            TextInput::make('email')->email()->maxLength(255)->required(),
-            TextInput::make('designation')->required(),
-            TextInput::make('password')
-                ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
-            Select::make('roles')
-                ->relationship('roles', 'name', fn (Builder $query) => $query->whereNot('name', 'super_admin'))
-                ->preload()
-                ->searchable(),
-        ]);
+            ->schema([
+                TextInput::make('name')->maxLength(255)->required(),
+                TextInput::make('email')->email()->maxLength(255)->required(),
+                TextInput::make('designation')->required(),
+                TextInput::make('password')
+                    ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
+                Select::make('roles')
+                    ->relationship('roles', 'name', fn (Builder $query) => $query->whereNot('name', 'super_admin'))
+                    ->preload()
+                    ->searchable(),
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -45,7 +45,7 @@ class PCOResource extends Resource
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('username'),
                 TextColumn::make('designation')->sortable(),
-                TextColumn::make('role')
+                TextColumn::make('roles.name')
             ])
             ->filters([
                 //
