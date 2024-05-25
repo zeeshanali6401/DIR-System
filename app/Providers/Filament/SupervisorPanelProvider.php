@@ -32,7 +32,6 @@ class SupervisorPanelProvider extends PanelProvider
             ->brandLogoHeight('5rem')
             ->brandName('Punjab Police')
             ->brandLogo(asset('images/logo.png'))
-            ->passwordReset()
             ->profile()
             ->authGuard('supervisor')
             ->colors([
@@ -45,8 +44,8 @@ class SupervisorPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Supervisor/Widgets'), for: 'App\\Filament\\Supervisor\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\AccountWidget::class,
+                // Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

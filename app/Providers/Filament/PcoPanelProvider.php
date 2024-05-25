@@ -10,7 +10,6 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -29,6 +28,9 @@ class PcoPanelProvider extends PanelProvider
             ->login(Login::class)
             ->authGuard('pco')
             ->spa()
+            ->brandLogo(asset('images/logo.png'))
+            ->sidebarWidth('12rem')
+            ->brandLogoHeight('5rem')
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -39,8 +41,8 @@ class PcoPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Pco/Widgets'), for: 'App\\Filament\\Pco\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\AccountWidget::class,
+                // Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

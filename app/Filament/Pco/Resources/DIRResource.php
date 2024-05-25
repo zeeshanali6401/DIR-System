@@ -27,12 +27,13 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class DIRResource extends Resource
 {
     protected static ?string $model = DIR::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-square-3-stack-3d';
 
     public static function form(Form $form): Form
     {
@@ -506,7 +507,11 @@ class DIRResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $user = Auth::user()->email;
         return $table
+        ->modifyQueryUsing(function (Builder $query) use ($user) {
+            $query->where('user_email', $user);
+        })
             ->recordAction(null)
             ->defaultSort('created_at', 'desc')
             ->striped()
@@ -520,7 +525,6 @@ class DIRResource extends Resource
                         return $record->finding_remarks == 1 ? 'Found' : 'Not Found';
                     })->badge()
                     ->color(fn (string $state): string => $state == 'Found' ? 'success' : 'danger'),
-                CheckboxColumn::make('status')->label('Valid'),
                 TextColumn::make('division')->sortable()->searchable(),
                 TextColumn::make('ps')->sortable()->searchable(),
                 TextColumn::make('case_nature')->sortable(),

@@ -27,10 +27,11 @@ class PCOResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')->maxLength(255)->required(),
+                TextInput::make('username')->maxLength(255)->required(),
                 TextInput::make('email')->email()->maxLength(255)->required(),
                 TextInput::make('designation')->required(),
                 TextInput::make('password')
-                    ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
+                    ->dehydrateStateUsing(fn ($state) => bcrypt($state))->password(),
                 Select::make('roles')
                     ->relationship('roles', 'name', fn (Builder $query) => $query->whereNot('name', 'super_admin'))
                     ->preload()
