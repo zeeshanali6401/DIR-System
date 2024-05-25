@@ -19,27 +19,27 @@ class DivisionStatsOverview extends BaseWidget
                 ->count())
                 ->description('All City DIRs')
                 ->color('success'),
-                Stat::make('Sader', DIR::where('division', 'sader')
+            Stat::make('Sader', DIR::where('division', 'sader')
                 ->whereDate('created_at', $currentDate)
                 ->count())
                 ->description('All Sader DIRs')
                 ->color('success'),
-                Stat::make('Civil Lines', DIR::where('division', 'Civil_lines')
+            Stat::make('Civil Lines', DIR::where('division', 'Civil_lines')
                 ->whereDate('created_at', $currentDate)
                 ->count())
                 ->description('All Civil Lines DIRs')
                 ->color('success'),
-                Stat::make('Iqbal Town', DIR::where('division', 'iqbal_town')
+            Stat::make('Iqbal Town', DIR::where('division', 'iqbal_town')
                 ->whereDate('created_at', $currentDate)
                 ->count())
                 ->description('All Iqbal Town DIRs')
                 ->color('success'),
-                Stat::make('Model Town', DIR::where('division', 'model_town')
+            Stat::make('Model Town', DIR::where('division', 'model_town')
                 ->whereDate('created_at', $currentDate)
                 ->count())
                 ->description('All Model Town DIRs')
                 ->color('success'),
-                Stat::make('Cantt', DIR::where('division', 'cantt')
+            Stat::make('Cantt', DIR::where('division', 'cantt')
                 ->whereDate('created_at', $currentDate)
                 ->count())
                 ->description('All Cantt DIRs')

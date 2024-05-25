@@ -128,25 +128,37 @@ class DIRResource extends Resource
                                 'model_town' => 'Model Town',
                                 'sader' => 'Sader',
                             ])
-                            ->hidden(function (Get $get): bool {
-                                $caseId = $get('case_id');
-
-                                if (!$caseId) {
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
                                     return false;
                                 }
-                                $recordExists = DIR::where('case_id', $caseId)->exists();
-                                return $recordExists;
+                                return false;
                             })->searchable(),
                         Select::make('ps')->required()
                             ->label('PS')
-                            ->hidden(function (Get $get): bool {
-                                $caseId = $get('case_id');
-
-                                if (!$caseId) {
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
                                     return false;
                                 }
-                                $recordExists = DIR::where('case_id', $caseId)->exists();
-                                return $recordExists;
+                                return false;
                             })
                             ->options([
                                 'shafiqabad' => 'Shafiqabad',
