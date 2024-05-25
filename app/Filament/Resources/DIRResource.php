@@ -32,7 +32,7 @@ use Illuminate\Database\Eloquent\Builder;
 class DIRResource extends Resource
 {
     protected static ?string $model = DIR::class;
-    protected static ?string $navigationIcon = 'heroicon-o-wallet';
+    protected static ?string $navigationIcon = 'heroicon-o-square-3-stack-3d';
     protected static ?string $navigationLabel = 'DIR';
 
     public static function form(Form $form): Form

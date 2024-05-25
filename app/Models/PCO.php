@@ -7,10 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 
 class PCO extends Authenticatable implements FilamentUser
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasPanelShield;
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +26,7 @@ class PCO extends Authenticatable implements FilamentUser
         'name',
         'email',
         'username',
+        'designation',
         'password',
     ];
 

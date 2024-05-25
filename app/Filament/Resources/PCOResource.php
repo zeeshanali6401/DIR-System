@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\SupervisorResource\Pages;
-use App\Filament\Resources\SupervisorResource\RelationManagers;
-use App\Models\Supervisor;
+use App\Filament\Resources\PCOResource\Pages;
+use App\Filament\Resources\PCOResource\RelationManagers;
+use App\Models\PCO;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -16,35 +16,35 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class SupervisorResource extends Resource
+class PCOResource extends Resource
 {
-    protected static ?string $model = Supervisor::class;
+    protected static ?string $model = PCO::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                TextInput::make('name')->maxLength(255)->required(),
-                TextInput::make('email')->email()->maxLength(255)->required(),
-                TextInput::make('designation')->required(),
-                TextInput::make('password')
-                    ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
-                Select::make('roles')
-                    ->relationship('roles', 'name', fn (Builder $query) => $query->whereNot('name', 'super_admin'))
-                    ->preload()
-                    ->searchable(),
-            ]);
+        ->schema([
+            TextInput::make('name')->maxLength(255)->required(),
+            TextInput::make('email')->email()->maxLength(255)->required(),
+            TextInput::make('designation')->required(),
+            TextInput::make('password')
+                ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
+            Select::make('roles')
+                ->relationship('roles', 'name', fn (Builder $query) => $query->whereNot('name', 'super_admin'))
+                ->preload()
+                ->searchable(),
+        ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')->searchable(),
                 TextColumn::make('username'),
-                TextColumn::make('designation'),
+                TextColumn::make('designation')->sortable(),
                 TextColumn::make('role')
             ])
             ->filters([
@@ -70,9 +70,9 @@ class SupervisorResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSupervisors::route('/'),
-            'create' => Pages\CreateSupervisor::route('/create'),
-            'edit' => Pages\EditSupervisor::route('/{record}/edit'),
+            'index' => Pages\ListPCOS::route('/'),
+            'create' => Pages\CreatePCO::route('/create'),
+            'edit' => Pages\EditPCO::route('/{record}/edit'),
         ];
     }
 }
