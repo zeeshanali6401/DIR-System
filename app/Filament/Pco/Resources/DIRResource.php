@@ -554,7 +554,7 @@ class DIRResource extends Resource
             ->filters([
                 Filter::make('case_date_time')
                     ->form([
-                        DatePicker::make('created_from'),
+                        DatePicker::make('created_from')->default(now()),
                         DatePicker::make('created_until'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
