@@ -3,13 +3,14 @@
 namespace App\Filament\Pco\Widgets;
 
 use App\Models\DIR;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\ChartWidget;
 
 class DoughnutChart extends ChartWidget
 {
+    use HasWidgetShield;
+
     public ?string $filter = 'today';
-
-
     protected static ?int $sort = 3;
     protected static ?string $heading = 'Chart';
     protected static ?string $maxHeight = '300px';

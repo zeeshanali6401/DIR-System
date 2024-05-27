@@ -3,12 +3,15 @@
 namespace App\Filament\Pco\Widgets;
 
 use App\Models\DIR;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Carbon\Carbon;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class DivisionStatsOverview extends BaseWidget
 {
+    use HasWidgetShield;
+
     protected function getStats(): array
     {
         $currentDate = Carbon::today(); // Get the current date

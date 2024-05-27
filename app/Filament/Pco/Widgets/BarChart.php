@@ -3,10 +3,13 @@
 namespace App\Filament\Pco\Widgets;
 
 use App\Models\DIR;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\ChartWidget;
 
 class BarChart extends ChartWidget
 {
+    use HasWidgetShield;
+
     protected static ?string $heading = 'Case Nature wise Chart';
     protected static ?int $sort = 1;
     public ?string $filter = 'today';

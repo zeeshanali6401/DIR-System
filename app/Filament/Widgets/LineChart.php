@@ -3,11 +3,14 @@
 namespace App\Filament\Widgets;
 
 use App\Models\DIR;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
 
 class LineChart extends ChartWidget
 {
+    use HasWidgetShield;
+
     protected static ?int $sort = 2;
     protected static ?string $heading = 'Total DIR Counts of this year';
     protected static string $color = 'info';
