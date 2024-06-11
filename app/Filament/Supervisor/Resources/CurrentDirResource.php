@@ -23,6 +23,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -496,9 +497,10 @@ class CurrentDirResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-        ->poll('4s')
+            ->poll('4s')
             ->modifyQueryUsing(function (Builder $query) {
                 $currentTime = Carbon::now();
+
                 if ($currentTime->between(Carbon::today()->setTime(6, 0), Carbon::today()->setTime(13, 59, 59))) {
                     $startTime = Carbon::today()->setTime(6, 0);
                     $endTime = Carbon::today()->setTime(13, 59, 59);
@@ -509,9 +511,10 @@ class CurrentDirResource extends Resource
                     $startTime = Carbon::today()->setTime(22, 0);
                     $endTime = Carbon::tomorrow()->setTime(5, 59, 59);
                 }
-                $query->whereBetween('created_at', [$startTime, $endTime]);
 
+                $query->whereBetween('created_at', [$startTime, $endTime]);
             })
+
             ->recordAction(null)
             ->defaultSort('created_at', 'desc')
             ->striped()
@@ -520,24 +523,29 @@ class CurrentDirResource extends Resource
                 TextColumn::make('shift')->sortable(),
                 ImageColumn::make('images')->circular()
                     ->stacked(),
-                TextColumn::make('finding_remarks')
+                TextColumn::make('finding_remarks')->label('Findings')
                     ->state(function (DIR $record): string {
                         return $record->finding_remarks == 1 ? 'Found' : 'Not Found';
                     })->badge()
                     ->color(fn (string $state): string => $state == 'Found' ? 'success' : 'danger'),
-                CheckboxColumn::make('status')->label('Valid'),
                 TextColumn::make('division')->sortable()->searchable(),
                 TextColumn::make('ps')->sortable()->searchable(),
-                TextColumn::make('case_nature')->sortable(),
-                TextColumn::make('case_date_time')->label('Date'),
-                TextColumn::make('caller_phone')->searchable(),
-                TextColumn::make('case_description'),
-                TextColumn::make('location')->searchable(),
-                TextColumn::make('camera_id')->searchable(),
-                TextColumn::make('evidence')->searchable(),
+                SelectColumn::make('status')
+                ->options([
+                    'pending' => 'Pending',
+                    'valid' => 'Valid',
+                    'invalid' => 'Invalid',
+                    ])->rules(['required']),
+                // TextColumn::make('case_nature')->sortable(),
+                // TextColumn::make('case_date_time')->label('Date'),
+                // TextColumn::make('caller_phone')->searchable(),
+                // TextColumn::make('case_description'),
+                // TextColumn::make('location')->searchable(),
+                // TextColumn::make('camera_id')->searchable(),
+                // TextColumn::make('evidence')->searchable(),
 
                 // TextColumn::make('finding_remarks')->sortable(),
-                TextColumn::make('pco_names'),
+                // TextColumn::make('pco_names'),
 
             ])
             ->actions([
@@ -545,9 +553,9 @@ class CurrentDirResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
-            ])
+            // ->bulkActions([
+            //     Tables\Actions\DeleteBulkAction::make(),
+            // ])
             ->recordUrl(null);
     }
 

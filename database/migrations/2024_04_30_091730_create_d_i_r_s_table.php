@@ -37,7 +37,7 @@ return new class extends Migration
             $table->string('user_id')->required();
             $table->string('user_ip')->required();
             $table->string('user_hostname')->required();
-            $table->string('status')->boolean()->default(0);
+            $table->enum('status', array('pending', 'valid', 'invalid'))->default('pending');
             $table->string('user_email')->required();
             $table->timestamps();
         });
