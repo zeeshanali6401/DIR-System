@@ -22,7 +22,7 @@ class ListDIRS extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Create DIR'),
+            // Actions\CreateAction::make()->label('Create DIR'),
             ExportAction::make()
                 ->exports([
                     ExcelExport::make()
