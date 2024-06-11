@@ -21,10 +21,10 @@ class PCOResource extends Resource
     protected static ?string $model = PCO::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    public static function canViewAny(): bool
-    {
-        return false;
-    }
+    // public static function canViewAny(): bool
+    // {
+    //     return false;
+    // }
     public static function form(Form $form): Form
     {
         return $form

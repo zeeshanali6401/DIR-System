@@ -15,7 +15,18 @@ class DivisionStatsOverview extends BaseWidget
     protected function getStats(): array
     {
         $currentDate = Carbon::today(); // Get the current date
+        $currentTime = Carbon::now();
 
+        if ($currentTime->between(Carbon::today()->setTime(6, 0), Carbon::today()->setTime(13, 59, 59))) {
+            $startTime = Carbon::today()->setTime(6, 0);
+            $endTime = Carbon::today()->setTime(13, 59, 59);
+        } elseif ($currentTime->between(Carbon::today()->setTime(14, 0), Carbon::today()->setTime(21, 59, 59))) {
+            $startTime = Carbon::today()->setTime(14, 0);
+            $endTime = Carbon::today()->setTime(21, 59, 59);
+        } else {
+            $startTime = Carbon::today()->setTime(22, 0);
+            $endTime = Carbon::tomorrow()->setTime(5, 59, 59);
+        }
         return [
             Stat::make('City', DIR::where('division', 'city')
                 ->whereDate('created_at', $currentDate)
@@ -47,6 +58,9 @@ class DivisionStatsOverview extends BaseWidget
                 ->count())
                 ->description('All Cantt DIRs')
                 ->color('success'),
+                Stat::make('Pending: ' . DIR::where('status', 'pending')->count(), 'Valid: ' . DIR::where('status', 'valid')->count())
+                ->description('Invalid: ' . DIR::where('status', 'invalid')->whereBetween('created_at', [$startTime, $endTime])->count())
+                ->color('danger'),
         ];
     }
 }
