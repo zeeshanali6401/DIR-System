@@ -12,6 +12,8 @@ use pxlrbt\FilamentExcel\Columns\Column;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use pxlrbt\FilamentExcel\Actions\Pages\ExportAction;
 use Illuminate\Database\Eloquent\Builder;
+use Carbon\Carbon;
+
 
 class ListDIRS extends ListRecords
 {
@@ -21,6 +23,20 @@ class ListDIRS extends ListRecords
 
     protected function getHeaderActions(): array
     {
+        $currentTime = Carbon::now();
+        $startTime = Carbon::today();
+        $endTime = Carbon::tomorrow()->subSecond();
+
+        if ($currentTime->between(Carbon::today()->setTime(6, 0), Carbon::today()->setTime(13, 59, 59))) {
+            $startTime->setTime(6, 0);
+            $endTime = Carbon::today()->setTime(13, 59, 59);
+        } elseif ($currentTime->between(Carbon::today()->setTime(14, 0), Carbon::today()->setTime(21, 59, 59))) {
+            $startTime->setTime(14, 0);
+            $endTime = Carbon::today()->setTime(21, 59, 59);
+        } else {
+            $startTime->subDay()->setTime(22, 0);
+            $endTime->subDay()->setTime(5, 59, 59);
+        }
         return [
             // Actions\CreateAction::make()->label('Create DIR'),
             ExportAction::make()
@@ -50,7 +66,7 @@ class ListDIRS extends ListRecords
                             Column::make('pco_names'),
                             Column::make('feedback')
                         ]),
-                        ExcelExport::make()->label('Pending DIR Exoport')
+                    ExcelExport::make()->label('Pending DIR Exoport')
                         ->withFilename(date('d-m-Y'))
                         ->withWriterType(\Maatwebsite\Excel\Excel::CSV)
                         ->withColumns([
@@ -74,11 +90,11 @@ class ListDIRS extends ListRecords
                             Column::make('pco_names'),
                             Column::make('feedback')
                         ])
-                        ->modifyQueryUsing(fn ($query) => $query->where('feedback', 'Pending'))
+                        ->modifyQueryUsing(fn ($query) => $query->where('status', 'pending')->where(function ($query2) use ($startTime, $endTime) {
+                            $query2->whereBetween('created_at', [$startTime, $endTime])
+                                ->orWhereBetween('created_at', [Carbon::yesterday()->setTime(22, 0), Carbon::today()->setTime(5, 59, 59)]);
+                        }))
                 ]),
-
-
         ];
     }
-
 }
