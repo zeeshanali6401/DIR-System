@@ -37,6 +37,7 @@ class PCO extends Authenticatable implements FilamentUser
      */
     protected $hidden = [
         'password',
+        'remember_token',
     ];
 
     /**

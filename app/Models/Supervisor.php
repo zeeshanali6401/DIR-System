@@ -32,6 +32,7 @@ class Supervisor extends Authenticatable implements FilamentUser
      */
     protected $hidden = [
         'password',
+        'remember_token',
     ];
 
     /**
