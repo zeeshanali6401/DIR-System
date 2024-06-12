@@ -16,16 +16,25 @@ class SupervisorSeeder extends Seeder
      */
     public function run(): void
     {
-        $permissions = Permission::where('guard_name', 'supervisor')->get();
         $role = Role::firstOrCreate(['name' => 'supervisor', 'guard_name' => 'supervisor']);
-        $role->givePermissionTo($permissions);
+        $permissionNames = Permission::pluck('name');
+        foreach ($permissionNames as $permissionName) {
+            $permission = Permission::firstOrCreate([
+                'name' => $permissionName,
+                'guard_name' => 'supervisor'
+            ]);
+            $role->givePermissionTo($permission);
+        }
         for ($i = 1; $i <= 10; $i++) {
-            Supervisor::create([
-                'name' => 'Supervisor'.$i,
-                'username' => 'admin'.$i.'@supervisor.com',
-                'email' => 'admin'.$i.'@supervisor.com',
+            $supervisor = Supervisor::create([
+                'name' => 'Supervisor' . $i,
+                'username' => 'admin' . $i . '@supervisor.com',
+                'email' => 'admin' . $i . '@supervisor.com',
                 'password' => Hash::make('12345678'),
-            ])->assignRole($role);
+            ]);
+
+            // Assign the role to the newly created supervisor
+            $supervisor->assignRole($role);
         }
     }
 }

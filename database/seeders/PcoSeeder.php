@@ -16,9 +16,15 @@ class PcoSeeder extends Seeder
      */
     public function run(): void
     {
-        $permissions = Permission::where('guard_name', 'pco')->get();
         $role = Role::firstOrCreate(['name' => 'pco', 'guard_name' => 'pco']);
-        $role->givePermissionTo($permissions);
+        $permissionNames = Permission::pluck('name');
+        foreach ($permissionNames as $permissionName) {
+            $permission = Permission::firstOrCreate([
+                'name' => $permissionName,
+                'guard_name' => 'pco'
+            ]);
+            $role->givePermissionTo($permission);
+        }
         for ($i = 1; $i <= 10; $i++) {
             PCO::create([
                 'name' => 'PCO'.$i,
