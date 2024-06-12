@@ -36,6 +36,8 @@ return new class extends Migration
             $table->string('feedback')->nullable();
             $table->string('user_id')->required();
             $table->string('user_ip')->required();
+            $table->string('field_force')->boolean()->default(false);
+            $table->string('local_cameras')->nullable();
             $table->string('user_hostname')->required();
             $table->enum('status', array('pending', 'valid', 'invalid'))->default('pending');
             $table->string('user_email')->required();

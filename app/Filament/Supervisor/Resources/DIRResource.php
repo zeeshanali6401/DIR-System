@@ -6,9 +6,11 @@ use App\Filament\Supervisor\Resources\DIRResource\Pages;
 use App\Filament\Supervisor\Resources\DIRResource\RelationManagers;
 use App\Models\DIR;
 use Filament\Forms;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
@@ -51,6 +53,9 @@ class DIRResource extends Resource
                         }
                     })
                     ->schema([
+                        Hidden::make('pco_names')->default(function () {
+                            return auth()->user()->name;
+                        }),
                         Hidden::make('user_ip')
                             ->default(getHostByName(php_uname('n'))),
                         Hidden::make('user_hostname')
@@ -239,28 +244,28 @@ class DIRResource extends Resource
                                 }
                                 return false;
                             }),
-                        Select::make('cro')
-                            ->options([
-                                'yes' => 'yes',
-                                'no' => 'no',
-                            ])
-                            ->required()
-                            ->label('CRO')
-                            ->hidden(function (Get $get) use ($form): bool {
-                                if ($form->getOperation() !== 'edit') {
-                                    $caseId = $get('case_id');
-                                    if (!$caseId) {
-                                        return false;
-                                    }
-                                    $recordExists = DIR::where('case_id', $caseId)->exists();
-                                    if ($recordExists) {
-                                        return true;
-                                    }
-                                } else {
-                                    return false;
-                                }
-                                return false;
-                            }),
+                        // Select::make('cro')
+                        //     ->options([
+                        //         'yes' => 'yes',
+                        //         'no' => 'no',
+                        //     ])
+                        //     ->required()
+                        //     ->label('CRO')
+                        //     ->hidden(function (Get $get) use ($form): bool {
+                        //         if ($form->getOperation() !== 'edit') {
+                        //             $caseId = $get('case_id');
+                        //             if (!$caseId) {
+                        //                 return false;
+                        //             }
+                        //             $recordExists = DIR::where('case_id', $caseId)->exists();
+                        //             if ($recordExists) {
+                        //                 return true;
+                        //             }
+                        //         } else {
+                        //             return false;
+                        //         }
+                        //         return false;
+                        //     }),
                         TextInput::make('face_trace')->required()
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {
@@ -413,24 +418,12 @@ class DIRResource extends Resource
                                 }
                                 return false;
                             }),
-                        TextInput::make('evidence')->required()
-                            ->hidden(function (Get $get) use ($form): bool {
-                                if ($form->getOperation() !== 'edit') {
-                                    $caseId = $get('case_id');
-                                    if (!$caseId) {
-                                        return false;
-                                    }
-                                    $recordExists = DIR::where('case_id', $caseId)->exists();
-                                    if ($recordExists) {
-                                        return true;
-                                    }
-                                } else {
-                                    return false;
-                                }
-                                return false;
-                            }),
-                        // TextInput::make('finding_remarks')->required(),
-                        TextInput::make('pco_names')->required()
+
+                        Select::make('evidence')
+                            ->options([
+                                'yes' => 'Yes',
+                                'no' => 'No',
+                            ])
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {
                                     $caseId = $get('case_id');
@@ -483,6 +476,7 @@ class DIRResource extends Resource
                                 return false;
                             })->dehydrateStateUsing(fn (string $state = null): string => $state ?? 'Pending'),
                         FileUpload::make('images')
+                            ->imageEditor()
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {
                                     $caseId = $get('case_id');
@@ -502,6 +496,18 @@ class DIRResource extends Resource
                             ->directory('images')
                             ->required()
                             ->downloadable(),
+                        Group::make()->schema([
+                            Section::make('')
+                                ->schema([
+                                    Checkbox::make('field_force')->label('Local Cameras conveyed to field force')
+                                        ->live(),
+
+                                    TextInput::make('local_cameras')
+                                        ->label('Count of local cameras')
+                                        ->required()
+                                        ->hidden(fn (Get $get): bool => !$get('field_force')),
+                                ]),
+                        ]),
                     ])->columns(3),
 
                 // Group::make()->schema([

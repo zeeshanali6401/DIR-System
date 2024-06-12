@@ -6,6 +6,7 @@ use App\Models\Supervisor;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class SupervisorSeeder extends Seeder
@@ -15,7 +16,9 @@ class SupervisorSeeder extends Seeder
      */
     public function run(): void
     {
+        $permissions = Permission::where('guard_name', 'supervisor')->get();
         $role = Role::firstOrCreate(['name' => 'supervisor', 'guard_name' => 'supervisor']);
+        $role->givePermissionTo($permissions);
         for ($i = 1; $i <= 10; $i++) {
             Supervisor::create([
                 'name' => 'Supervisor'.$i,

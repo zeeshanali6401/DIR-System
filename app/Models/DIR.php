@@ -35,7 +35,9 @@ class DIR extends Model
         'user_ip',
         'user_hostname',
         'status',
-        'user_email'
+        'user_email',
+        'field_force',
+        'local_cameras',
     ];
     protected $casts = [
         'images' => 'array',
