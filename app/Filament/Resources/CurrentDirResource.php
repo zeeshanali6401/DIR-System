@@ -497,21 +497,27 @@ class CurrentDirResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-        ->poll('4s')
+            ->poll('4s')
             ->modifyQueryUsing(function (Builder $query) {
                 $currentTime = Carbon::now();
+                $startTime = Carbon::today();
+                $endTime = Carbon::tomorrow()->subSecond();
+
                 if ($currentTime->between(Carbon::today()->setTime(6, 0), Carbon::today()->setTime(13, 59, 59))) {
-                    $startTime = Carbon::today()->setTime(6, 0);
+                    $startTime->setTime(6, 0);
                     $endTime = Carbon::today()->setTime(13, 59, 59);
                 } elseif ($currentTime->between(Carbon::today()->setTime(14, 0), Carbon::today()->setTime(21, 59, 59))) {
-                    $startTime = Carbon::today()->setTime(14, 0);
+                    $startTime->setTime(14, 0);
                     $endTime = Carbon::today()->setTime(21, 59, 59);
                 } else {
-                    $startTime = Carbon::today()->setTime(22, 0);
-                    $endTime = Carbon::tomorrow()->setTime(5, 59, 59);
+                    $startTime->subDay()->setTime(22, 0);
+                    $endTime->subDay()->setTime(5, 59, 59);
                 }
-                $query->whereBetween('created_at', [$startTime, $endTime]);
 
+                $query->where(function ($query) use ($startTime, $endTime) {
+                    $query->whereBetween('created_at', [$startTime, $endTime])
+                        ->orWhereBetween('created_at', [Carbon::yesterday()->setTime(22, 0), Carbon::today()->setTime(5, 59, 59)]);
+                });
             })
             ->recordAction(null)
             ->defaultSort('created_at', 'desc')

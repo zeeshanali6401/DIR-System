@@ -500,8 +500,8 @@ class DIRResource extends Resource
                             })
                             ->multiple()
                             ->directory('images')
-                            ->required()->image()
-                            ->downloadable()
+                            ->required()
+                            ->downloadable(),
                     ])->columns(3),
 
                 // Group::make()->schema([
@@ -532,7 +532,6 @@ class DIRResource extends Resource
                         return $record->finding_remarks == 1 ? 'Found' : 'Not Found';
                     })->badge()
                     ->color(fn (string $state): string => $state == 'Found' ? 'success' : 'danger'),
-                CheckboxColumn::make('status')->label('Valid'),
                 TextColumn::make('division')->sortable()->searchable(),
                 TextColumn::make('ps')->sortable()->searchable(),
                 TextColumn::make('case_nature')->sortable(),

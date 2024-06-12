@@ -26,22 +26,22 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('12345678'),
             ]
         );
-        Supervisor::create(
-            [
-                'name' => 'Supervisor',
-                'username' => 'admin@supervisor.com',
-                'email' => 'admin@supervisor.com',
-                'password' => Hash::make('12345678'),
-            ]
-        );
-        PCO::create(
-            [
-                'name' => 'PCO',
-                'username' => 'admin@pco.com',
-                'email' => 'admin@pco.com',
-                'password' => Hash::make('12345678'),
-            ]
-        );
+        // Supervisor::create(
+        //     [
+        //         'name' => 'Supervisor',
+        //         'username' => 'admin@supervisor.com',
+        //         'email' => 'admin@supervisor.com',
+        //         'password' => Hash::make('12345678'),
+        //     ]
+        // );
+        // PCO::create(
+        //     [
+        //         'name' => 'PCO',
+        //         'username' => 'admin@pco.com',
+        //         'email' => 'admin@pco.com',
+        //         'password' => Hash::make('12345678'),
+        //     ]
+        // );
         // $this->call([DIRTableSeeder::class]);
     }
 }
