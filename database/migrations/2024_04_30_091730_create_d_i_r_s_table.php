@@ -28,10 +28,10 @@ return new class extends Migration
             $table->boolean('finding_remarks')->required();
             $table->string('pco_names')->required();
             $table->string('images')->required();
-            $table->string('cro')->required();
+            $table->string('cro')->nullable();
             $table->string('face_trace')->required();
             $table->string('anpr_passing')->required();
-            $table->string('culprit')->required();
+            $table->string('culprit')->nullable();
             $table->string('fir_number')->required();
             $table->string('feedback')->nullable();
             $table->string('user_id')->required();
