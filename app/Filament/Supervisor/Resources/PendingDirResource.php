@@ -77,7 +77,8 @@ class PendingDirResource extends Resource
                 TextColumn::make('team')->sortable()->searchable(),
                 TextColumn::make('shift')->sortable(),
                 ImageColumn::make('images')->circular()
-                    ->stacked(),
+                    ->stacked()
+                    ->limit(6),
                 TextColumn::make('finding_remarks')->label('Findings')
                     ->state(function (DIR $record): string {
                         return $record->finding_remarks == 1 ? 'Found' : 'Not Found';
@@ -93,8 +94,8 @@ class PendingDirResource extends Resource
                     ])->rules(['required'])
             ])
             ->actions([
-                Tables\Actions\Action::make('View')->color('success')->icon('heroicon-o-eye')->url(fn (DIR $record): string =>  self::getUrl('ViewDirRecord', ['record' => $record])),
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\Action::make('View')->color('success')->icon('heroicon-o-eye')->url(fn (DIR $record): string =>  self::getUrl('ViewDirRecord', ['record' => $record])),
+                // Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             // ->bulkActions([

@@ -549,7 +549,8 @@ class DIRResource extends Resource
                 TextColumn::make('team')->sortable()->searchable(),
                 TextColumn::make('shift')->sortable(),
                 ImageColumn::make('images')->circular()
-                    ->stacked(),
+                    ->stacked()
+                    ->limit(6),
                 TextColumn::make('finding_remarks')
                     ->state(function (DIR $record): string {
                         return $record->finding_remarks == 1 ? 'Found' : 'Not Found';
