@@ -9,7 +9,10 @@ use Filament\Resources\Pages\ListRecords;
 class ListPendingDirs extends ListRecords
 {
     protected static string $resource = PendingDirResource::class;
-
+    public function getHeading(): string
+    {
+        return "Pending DIRs";
+    }
     protected function getHeaderActions(): array
     {
         return [

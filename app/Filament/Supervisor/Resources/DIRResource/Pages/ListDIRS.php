@@ -14,7 +14,10 @@ use pxlrbt\FilamentExcel\Actions\Pages\ExportAction;
 class ListDIRS extends ListRecords
 {
     protected static string $resource = DIRResource::class;
-
+    public function getHeading(): string
+    {
+        return "Manage DIRs";
+    }
     protected function getHeaderActions(): array
     {
         $currentTime = Carbon::now();

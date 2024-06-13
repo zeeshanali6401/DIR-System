@@ -9,7 +9,10 @@ use Filament\Resources\Pages\ListRecords;
 class ListPCOS extends ListRecords
 {
     protected static string $resource = PCOResource::class;
-
+    public function getHeading(): string
+    {
+        return "Manage PCOs";
+    }
     protected function getHeaderActions(): array
     {
         return [
