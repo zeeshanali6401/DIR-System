@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\DIRResource\Pages;
+use App\Filament\Resources\Pages\DirImages;
 use App\Models\DIR;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -584,6 +585,7 @@ class DIRResource extends Resource
             ])->filtersFormMaxHeight('300px')
             ->actions([
                 Tables\Actions\Action::make('View')->color('success')->icon('heroicon-o-eye')->url(fn (DIR $record): string =>  self::getUrl('ViewDirRecord', ['record' => $record])),
+                Tables\Actions\Action::make('Media')->color('warning')->icon('heroicon-o-camera')->url(fn (DIR $record): string =>  self::getUrl('ViewDirImages', ['record' => $record])),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
@@ -606,6 +608,7 @@ class DIRResource extends Resource
             'index' => Pages\ListDIRS::route('/'),
             'create' => Pages\CreateDIR::route('/create'),
             'ViewDirRecord' => Pages\ViewDirRecord::route('/{record}/ViewDirRecord'),
+            'ViewDirImages' => DirImages::route('/{record}/ViewDirImages'),
         ];
     }
 }

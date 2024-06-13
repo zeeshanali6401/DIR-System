@@ -44,10 +44,10 @@ class ViewDirRecord extends ViewRecord
                         TextEntry::make('user_email')->label('User Email'),
                         TextEntry::make('user_hostname')->label('User Hostname'),
                     ])->columns(3),
-                Section::make()->schema([
-                    ImageEntry::make('images')->limit(7)
-                        ->limitedRemainingText()
-                ])
+                // Section::make()->schema([
+                //     ImageEntry::make('images')->limit(7)
+                //         ->limitedRemainingText()
+                // ])
             ]);
     }
 }

@@ -27,7 +27,7 @@ return new class extends Migration
             $table->text('evidence')->required();
             $table->boolean('finding_remarks')->required();
             $table->string('pco_names')->required();
-            $table->string('images')->required();
+            $table->Longtext('images')->required();
             $table->string('cro')->nullable();
             $table->string('face_trace')->required();
             $table->string('anpr_passing')->required();
