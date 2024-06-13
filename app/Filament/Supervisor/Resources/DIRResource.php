@@ -476,6 +476,34 @@ class DIRResource extends Resource
                                 }
                                 return false;
                             })->dehydrateStateUsing(fn (string $state = null): string => $state ?? 'Pending'),
+                        TextInput::make('gang_name')
+                            ->hidden(function (Get $get) use ($form): bool {
+                                if ($form->getOperation() !== 'edit') {
+                                    $caseId = $get('case_id');
+                                    if (!$caseId) {
+                                        return false;
+                                    }
+                                    $recordExists = DIR::where('case_id', $caseId)->exists();
+                                    if ($recordExists) {
+                                        return true;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                                return false;
+                            }),
+                        Group::make()->schema([
+                            Section::make('')
+                                ->schema([
+                                    Checkbox::make('field_force')->label('Local Cameras conveyed to field force')
+                                        ->live(),
+
+                                    TextInput::make('local_cameras')
+                                        ->label('Count of local cameras')
+                                        ->required()
+                                        ->hidden(fn (Get $get): bool => !$get('field_force')),
+                                ]),
+                        ]),
                         FileUpload::make('images')
                             ->imageEditor()
                             ->hidden(function (Get $get) use ($form): bool {
@@ -497,18 +525,6 @@ class DIRResource extends Resource
                             ->directory('images')
                             ->required()
                             ->downloadable(),
-                        Group::make()->schema([
-                            Section::make('')
-                                ->schema([
-                                    Checkbox::make('field_force')->label('Local Cameras conveyed to field force')
-                                        ->live(),
-
-                                    TextInput::make('local_cameras')
-                                        ->label('Count of local cameras')
-                                        ->required()
-                                        ->hidden(fn (Get $get): bool => !$get('field_force')),
-                                ]),
-                        ]),
                     ])->columns(3),
 
                 // Group::make()->schema([

@@ -38,6 +38,7 @@ class DIR extends Model
         'user_email',
         'field_force',
         'local_cameras',
+        'gang_name',
     ];
     protected $casts = [
         'images' => 'array',

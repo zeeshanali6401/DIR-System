@@ -41,6 +41,7 @@ return new class extends Migration
             $table->string('user_hostname')->required();
             $table->enum('status', array('pending', 'valid', 'invalid'))->default('pending');
             $table->string('user_email')->required();
+            $table->string('gang_name')->nullable();
             $table->timestamps();
         });
     }
