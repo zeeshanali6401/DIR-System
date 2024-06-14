@@ -28,7 +28,7 @@ class SupervisorSeeder extends Seeder
         for ($i = 1; $i <= 10; $i++) {
             $supervisor = Supervisor::create([
                 'name' => 'Supervisor' . $i,
-                'username' => 'admin' . $i . '@supervisor.com',
+                'username' => rand(10000, 99999),
                 'email' => 'admin' . $i . '@supervisor.com',
                 'password' => Hash::make('12345678'),
             ]);

@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Filament\Supervisor\Pages\Auth;
+namespace App\Filament\Pages\Auth;
 
-use Filament\Pages\Page;
-use App\Models\Supervisor;
+use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
 use Filament\Forms;
@@ -15,7 +14,6 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\SimplePage;
 use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\View\View;
 use Illuminate\Validation\ValidationException;
 
 class Login extends SimplePage implements HasForms
@@ -24,7 +22,8 @@ class Login extends SimplePage implements HasForms
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static string $view = 'filament.supervisor.pages.auth.login';
+    protected static string $view = 'filament.admin.pages.auth.login';
+
     protected static bool $shouldRegisterNavigation = false;
 
     public ?array $data = [];
@@ -69,7 +68,7 @@ class Login extends SimplePage implements HasForms
                     ->label(__('filament-panels::pages/auth/login.form.remember.label'))
             ])
             ->statePath('data')
-            ->model(Supervisor::class);
+            ->model(User::class);
     }
 
     /**
@@ -104,7 +103,7 @@ class Login extends SimplePage implements HasForms
 
         $user = Filament::auth()->user();
         if (
-            ($user instanceof Supervisor && $user instanceof FilamentUser) &&
+            ($user instanceof User && $user instanceof FilamentUser) &&
             (!$user->canAccessPanel(Filament::getCurrentPanel()))
         ) {
             Filament::auth()->logout();

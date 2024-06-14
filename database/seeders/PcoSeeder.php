@@ -27,9 +27,9 @@ class PcoSeeder extends Seeder
         }
         for ($i = 1; $i <= 10; $i++) {
             PCO::create([
-                'name' => 'PCO'.$i,
-                'username' => 'admin'.$i.'@pco.com',
-                'email' => 'admin'.$i.'@pco.com',
+                'name' => 'PCO' . $i,
+                'username' => rand(10000, 99999),
+                'email' => 'admin' . $i . '@pco.com',
                 'password' => Hash::make('12345678'),
             ])->assignRole($role);
         }

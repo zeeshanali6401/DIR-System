@@ -51,6 +51,7 @@ class Login extends SimplePage implements HasForms
         return $form
             ->schema([
                 Forms\Components\TextInput::make('username')
+                    ->label('Login ID')
                     ->autocomplete()
                     ->autofocus()
                     ->required()
