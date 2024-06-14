@@ -556,20 +556,13 @@ class DIRResource extends Resource
                         return $record->finding_remarks == 1 ? 'Found' : 'Not Found';
                     })->badge()
                     ->color(fn (string $state): string => $state == 'Found' ? 'success' : 'danger'),
-                CheckboxColumn::make('status')->label('Valid'),
                 TextColumn::make('division')->sortable()->searchable(),
                 TextColumn::make('ps')->sortable()->searchable(),
                 TextColumn::make('case_nature')->sortable(),
                 TextColumn::make('case_date_time')->label('Date'),
                 TextColumn::make('caller_phone')->searchable(),
-                TextColumn::make('case_description'),
                 TextColumn::make('location')->searchable(),
-                TextColumn::make('camera_id')->searchable(),
                 TextColumn::make('evidence')->searchable(),
-
-                // TextColumn::make('finding_remarks')->sortable(),
-                TextColumn::make('pco_names'),
-
             ])
             ->filters([
                 Filter::make('case_date_time')
@@ -610,9 +603,6 @@ class DIRResource extends Resource
                 Tables\Actions\Action::make('Media')->color('warning')->icon('heroicon-o-camera')->url(fn (DIR $record): string =>  self::getUrl('ViewDirImages', ['record' => $record])),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
             ])
             ->recordUrl(null);
     }

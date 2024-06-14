@@ -13,7 +13,8 @@ use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use pxlrbt\FilamentExcel\Actions\Pages\ExportAction;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
-
+use Filament\Actions\Action;
+use Filament\Support\Enums\MaxWidth;
 
 class ListDIRS extends ListRecords
 {
@@ -39,62 +40,12 @@ class ListDIRS extends ListRecords
         }
         return [
             // Actions\CreateAction::make()->label('Create DIR'),
-            ExportAction::make()
-                ->exports([
-                    ExcelExport::make()
-                        ->label('Full Export')
-                        ->withFilename(date('d-m-Y'))
-                        ->withWriterType(\Maatwebsite\Excel\Excel::CSV)
-                        ->withColumns([
-                            Column::make('team'),
-                            Column::make('case_id'),
-                            Column::make('culprit'),
-                            Column::make('anpr_passing'),
-                            Column::make('cro'),
-                            Column::make('shift'),
-                            Column::make('division'),
-                            Column::make('ps'),
-                            Column::make('case_nature'),
-                            Column::make('time'),
-                            Column::make('case_date_time'),
-                            Column::make('caller_phone'),
-                            Column::make('case_description'),
-                            Column::make('location'),
-                            Column::make('camera_id'),
-                            Column::make('evidence'),
-                            Column::make('finding_remarks'),
-                            Column::make('pco_names'),
-                            Column::make('feedback')
-                        ]),
-                    ExcelExport::make()->label('Pending DIR Exoport')
-                        ->withFilename(date('d-m-Y'))
-                        ->withWriterType(\Maatwebsite\Excel\Excel::CSV)
-                        ->withColumns([
-                            Column::make('team'),
-                            Column::make('case_id'),
-                            Column::make('culprit'),
-                            Column::make('anpr_passing'),
-                            Column::make('cro'),
-                            Column::make('shift'),
-                            Column::make('division'),
-                            Column::make('ps'),
-                            Column::make('case_nature'),
-                            Column::make('time'),
-                            Column::make('case_date_time'),
-                            Column::make('caller_phone'),
-                            Column::make('case_description'),
-                            Column::make('location'),
-                            Column::make('camera_id'),
-                            Column::make('evidence'),
-                            Column::make('finding_remarks'),
-                            Column::make('pco_names'),
-                            Column::make('feedback')
-                        ])
-                        ->modifyQueryUsing(fn ($query) => $query->where('status', 'pending')->where(function ($query2) use ($startTime, $endTime) {
-                            $query2->whereBetween('created_at', [$startTime, $endTime])
-                                ->orWhereBetween('created_at', [Carbon::yesterday()->setTime(22, 0), Carbon::today()->setTime(5, 59, 59)]);
-                        }))
-                ]),
+            Action::make('export')
+                ->modalHeading('Export Data')
+                ->modalContent(view('pages.export'))
+                ->modalSubmitAction(false)
+                ->modalCancelAction(false)
+                ->modalWidth(MaxWidth::Small),
         ];
     }
 }
