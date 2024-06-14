@@ -37,39 +37,29 @@ class PendingDirResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(function (Builder $query) {
-                $currentTime = Carbon::now();
+        ->modifyQueryUsing(function (Builder $query) {
+            $currentTime = Carbon::now();
+            $startTime = Carbon::today();
+            $endTime = Carbon::tomorrow()->subSecond();
+            if ($currentTime->between(Carbon::today()->setTime(6, 0), Carbon::today()->setTime(13, 59, 59))) {
+                $startTime->setTime(6, 0);
+                $endTime = Carbon::today()->setTime(13, 59, 59);
+            } elseif ($currentTime->between(Carbon::today()->setTime(14, 0), Carbon::today()->setTime(21, 59, 59))) {
+                $startTime->setTime(14, 0);
+                $endTime = Carbon::today()->setTime(21, 59, 59);
+            } else {
+                $startTime->subDay()->setTime(22, 0);
+                $endTime->setTime(5, 59, 59);
+            }
 
-                if ($currentTime->between(Carbon::today()->setTime(6, 0), Carbon::today()->setTime(13, 59, 59))) {
-                    $startTime = Carbon::today()->setTime(6, 0);
-                    $endTime = Carbon::today()->setTime(13, 59, 59);
-                } elseif ($currentTime->between(Carbon::today()->setTime(14, 0), Carbon::today()->setTime(21, 59, 59))) {
-                    $startTime = Carbon::today()->setTime(14, 0);
-                    $endTime = Carbon::today()->setTime(21, 59, 59);
-                } else {
-                    $startTime = Carbon::today()->setTime(22, 0);
-                    $endTime = Carbon::tomorrow()->setTime(5, 59, 59);
-                }
-                $query->whereBetween('created_at', [$startTime, $endTime])->where('status', 'pending');
-            })
+            $query->where('status', 'pending')
+                  ->where(function ($query) use ($startTime, $endTime) {
+                      $query->whereBetween('case_date_time', [$startTime, $endTime])
+                            ->orWhereBetween('case_date_time', [Carbon::yesterday()->setTime(22, 0), Carbon::today()->setTime(5, 59, 59)]);
+                  });
+        })
+
             ->poll('4s')
-            ->modifyQueryUsing(function (Builder $query) {
-                $currentTime = Carbon::now();
-
-                if ($currentTime->between(Carbon::today()->setTime(6, 0), Carbon::today()->setTime(13, 59, 59))) {
-                    $startTime = Carbon::today()->setTime(6, 0);
-                    $endTime = Carbon::today()->setTime(13, 59, 59);
-                } elseif ($currentTime->between(Carbon::today()->setTime(14, 0), Carbon::today()->setTime(21, 59, 59))) {
-                    $startTime = Carbon::today()->setTime(14, 0);
-                    $endTime = Carbon::today()->setTime(21, 59, 59);
-                } else {
-                    $startTime = Carbon::today()->setTime(22, 0);
-                    $endTime = Carbon::tomorrow()->setTime(5, 59, 59);
-                }
-
-                $query->whereBetween('created_at', [$startTime, $endTime]);
-            })
-
             ->recordAction(null)
             ->defaultSort('created_at', 'desc')
             ->striped()
