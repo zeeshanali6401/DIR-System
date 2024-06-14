@@ -39,6 +39,8 @@ class DIR extends Model
         'field_force',
         'local_cameras',
         'gang_name',
+        'supervisor_id',
+        'pco_id',
     ];
     protected $casts = [
         'images' => 'array',

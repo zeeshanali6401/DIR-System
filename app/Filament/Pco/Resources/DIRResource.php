@@ -64,7 +64,8 @@ class DIRResource extends Resource
                             ->default(auth()->user()->id),
                         Hidden::make('user_email')
                             ->default(auth()->user()->email),
-                        TextInput::make('case_id')->live()->unique(function () use ($form) {
+                        Hidden::make('pco_id')->default(auth()->user()->username)->required(),
+                            TextInput::make('case_id')->live()->unique(function () use ($form) {
                             if ($form->getOperation() === 'edit') {
                                 return false;
                             }
@@ -77,11 +78,11 @@ class DIRResource extends Resource
                             ->mask('LHR-99999999-9999999')
                             ->placeholder('LHR-99999999-9999'),
 
-                        Select::make('team')->required()->alpha()
+                        Select::make('team')->required()
                             ->options([
-                                'A' => 'A',
-                                'B' => 'B',
-                                'C' => 'C',
+                                '1' => '1',
+                                '2' => '2',
+                                '3' => '3',
                             ])
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {

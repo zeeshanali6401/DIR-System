@@ -65,6 +65,7 @@ class DIRResource extends Resource
                             ->default(auth()->user()->id),
                         Hidden::make('user_email')
                             ->default(auth()->user()->email),
+                        Hidden::make('supervisor_id')->default(auth()->user()->username)->required(),
                         TextInput::make('case_id')->live()->unique(function () use ($form) {
                             if ($form->getOperation() === 'edit') {
                                 return false;
@@ -77,12 +78,11 @@ class DIRResource extends Resource
                             })
                             ->mask('LHR-99999999-9999999')
                             ->placeholder('LHR-99999999-9999'),
-
-                        Select::make('team')->required()->alpha()
+                        Select::make('team')->required()
                             ->options([
-                                'A' => 'A',
-                                'B' => 'B',
-                                'C' => 'C',
+                                '1' => '1',
+                                '2' => '2',
+                                '3' => '3',
                             ])
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {
@@ -245,28 +245,6 @@ class DIRResource extends Resource
                                 }
                                 return false;
                             }),
-                        // Select::make('cro')
-                        //     ->options([
-                        //         'yes' => 'yes',
-                        //         'no' => 'no',
-                        //     ])
-                        //     ->required()
-                        //     ->label('CRO')
-                        //     ->hidden(function (Get $get) use ($form): bool {
-                        //         if ($form->getOperation() !== 'edit') {
-                        //             $caseId = $get('case_id');
-                        //             if (!$caseId) {
-                        //                 return false;
-                        //             }
-                        //             $recordExists = DIR::where('case_id', $caseId)->exists();
-                        //             if ($recordExists) {
-                        //                 return true;
-                        //             }
-                        //         } else {
-                        //             return false;
-                        //         }
-                        //         return false;
-                        //     }),
                         TextInput::make('face_trace')->required()
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {
@@ -404,7 +382,7 @@ class DIRResource extends Resource
                                 return false;
                             }),
 
-                            TextInput::make('camera_id')->required()
+                        TextInput::make('camera_id')->required()
                             ->mask('9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, 9999, ')
                             ->hidden(function (Get $get) use ($form): bool {
                                 if ($form->getOperation() !== 'edit') {
@@ -505,7 +483,21 @@ class DIRResource extends Resource
                                         ->required()
                                         ->hidden(fn (Get $get): bool => !$get('field_force')),
                                 ]),
-                        ]),
+                        ])->hidden(function (Get $get) use ($form): bool {
+                            if ($form->getOperation() !== 'edit') {
+                                $caseId = $get('case_id');
+                                if (!$caseId) {
+                                    return false;
+                                }
+                                $recordExists = DIR::where('case_id', $caseId)->exists();
+                                if ($recordExists) {
+                                    return true;
+                                }
+                            } else {
+                                return false;
+                            }
+                            return false;
+                        }),
                         FileUpload::make('images')
                             ->imageEditor()
                             ->hidden(function (Get $get) use ($form): bool {

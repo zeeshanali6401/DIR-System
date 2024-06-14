@@ -42,6 +42,8 @@ return new class extends Migration
             $table->enum('status', array('pending', 'valid', 'invalid'))->default('pending');
             $table->string('user_email')->required();
             $table->string('gang_name')->nullable();
+            $table->string('supervisor_id')->default(null)->nullable();
+            $table->string('pco_id')->default(null)->nullable();
             $table->timestamps();
         });
     }
