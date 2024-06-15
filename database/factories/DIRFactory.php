@@ -22,6 +22,7 @@ class DIRFactory extends Factory
         return [
             'case_id' => $this->faker->regexify('LHR-\d{8}-\d{7}'),
             'team' => $this->faker->randomElement(['A', 'B', 'C']),
+            'gang_name' => $this->faker->randomElement(['Chotu Gang', 'Khalid Chitta', 'Shahid Lamba']),
             'shift' => $this->faker->randomElement(['Morning', 'Afternoon', 'Night']),
             'cro' => $this->faker->randomElement(['yes', 'no']),
             'face_trace' => $this->faker->randomElement(['yes', 'no']),
@@ -31,7 +32,7 @@ class DIRFactory extends Factory
             'fir_number' => $this->faker->randomNumber(4, true),
             'culprit' => $this->faker->randomElement(['yes', 'no']),
             'case_nature' => $this->faker->randomElement(['Traffic Offence', 'Local & Special Laws', 'Crime Against Person', 'Crime Against Property']),
-            'case_date_time' => $this->faker->dateTimeThisYear(),
+            'case_date_time' => now(),
             'caller_phone' => '+92' . substr($this->faker->numerify('##########'), 0, 10),
             'case_description' => $this->faker->sentence,
             'location' => $this->faker->city('us'),
@@ -44,6 +45,7 @@ class DIRFactory extends Factory
             'user_id' => 1,
             'user_ip' => $this->faker->ipv4,
             'user_hostname' => $this->faker->domainName,
+            'user_email' => $this->faker->email,
 
         ];
     }

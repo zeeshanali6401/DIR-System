@@ -502,7 +502,6 @@ class CurrentDirResource extends Resource
                 $currentTime = Carbon::now();
                 $startTime = Carbon::today();
                 $endTime = Carbon::tomorrow()->subSecond();
-
                 if ($currentTime->between(Carbon::today()->setTime(6, 0), Carbon::today()->setTime(13, 59, 59))) {
                     $startTime->setTime(6, 0);
                     $endTime = Carbon::today()->setTime(13, 59, 59);
@@ -511,13 +510,14 @@ class CurrentDirResource extends Resource
                     $endTime = Carbon::today()->setTime(21, 59, 59);
                 } else {
                     $startTime->subDay()->setTime(22, 0);
-                    $endTime->subDay()->setTime(5, 59, 59);
+                    $endTime->setTime(5, 59, 59);
                 }
 
-                $query->where(function ($query) use ($startTime, $endTime) {
-                    $query->whereBetween('created_at', [$startTime, $endTime])
-                        ->orWhereBetween('created_at', [Carbon::yesterday()->setTime(22, 0), Carbon::today()->setTime(5, 59, 59)]);
-                });
+                $query
+                    ->where(function ($query) use ($startTime, $endTime) {
+                        $query->whereBetween('case_date_time', [$startTime, $endTime])
+                            ->orWhereBetween('case_date_time', [Carbon::yesterday()->setTime(22, 0), Carbon::today()->setTime(5, 59, 59)]);
+                    });
             })
             ->recordAction(null)
             ->defaultSort('created_at', 'desc')
@@ -535,6 +535,11 @@ class CurrentDirResource extends Resource
                 TextColumn::make('division')->sortable()->searchable(),
                 TextColumn::make('ps')->sortable()->searchable(),
                 SelectColumn::make('status')
+                    ->afterStateUpdated(function (DIR $record): void {
+                        $dir = DIR::find($record->id);
+                        $dir->supervisor_id = auth()->user()->username;
+                        $dir->save();
+                    })
                     ->options([
                         'pending' => 'Pending',
                         'valid' => 'Valid',

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ReportsResource\Pages;
+use App\Filament\Resources\ReportsResource\Pages\Reports as PagesReports;
 use App\Filament\Resources\ReportsResource\RelationManagers;
 use App\Models\DIR;
 use App\Models\Reports;
@@ -42,24 +43,12 @@ class ReportsResource extends Resource
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('username')->searchable(),
                 TextColumn::make('email')->searchable(),
-                TextColumn::make('Valid')
-                    ->default(
-                        fn ($record) =>
-                        DIR::where('status', 'valid')
-                            ->where('supervisor_id', $record->id)
-                            ->count()
-                    )
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Action::make('View')
-                    ->modalHeading('Export Data')
-                    ->modalContent(view('pages.export'))
-                    ->modalSubmitAction(false)
-                    ->modalCancelAction(false)
-                    ->modalWidth(MaxWidth::Small),
+                Tables\Actions\Action::make('View')->color('success')->icon('heroicon-o-eye')->url(fn (Supervisor $record): string =>  self::getUrl('ViewReport', ['record' => $record]))
             ]);
     }
 
@@ -75,6 +64,7 @@ class ReportsResource extends Resource
         return [
             'index' => Pages\ListReports::route('/'),
             'create' => Pages\CreateReports::route('/create'),
+            'ViewReport' => PagesReports::route('/{record}'),
             'edit' => Pages\EditReports::route('/{record}/edit'),
         ];
     }
