@@ -32,7 +32,7 @@ return new class extends Migration
             $table->string('face_trace')->required();
             $table->string('anpr_passing')->required();
             $table->string('culprit')->nullable();
-            $table->string('fir_number')->required();
+            $table->string('fir_number')->nullable();
             $table->string('feedback')->nullable();
             $table->string('user_id')->required();
             $table->string('user_ip')->required();
