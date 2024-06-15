@@ -526,7 +526,7 @@ class CurrentDirResource extends Resource
                 TextColumn::make('team')->sortable()->searchable(),
                 TextColumn::make('shift')->sortable(),
                 ImageColumn::make('images')->circular()
-                    ->stacked(),
+                    ->stacked()->limit(2),
                 TextColumn::make('finding_remarks')->label('Findings')
                     ->state(function (DIR $record): string {
                         return $record->finding_remarks == 1 ? 'Found' : 'Not Found';

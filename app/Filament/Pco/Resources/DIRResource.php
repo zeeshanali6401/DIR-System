@@ -2,9 +2,9 @@
 
 namespace App\Filament\Pco\Resources;
 
-use App\Filament\Pco\Pages\DirImages;
 use App\Filament\Pco\Resources\DIRResource\Pages;
 use App\Filament\Pco\Resources\DIRResource\RelationManagers;
+use App\Filament\Resources\Pages\DirImages;
 use App\Models\DIR;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
@@ -502,7 +502,7 @@ class DIRResource extends Resource
                 TextColumn::make('shift')->sortable(),
                 ImageColumn::make('images')->circular()
                     ->stacked()
-                    ->limit(6),
+                    ->limit(2),
                 TextColumn::make('finding_remarks')
                     ->state(function (DIR $record): string {
                         return $record->finding_remarks == 1 ? 'Found' : 'Not Found';

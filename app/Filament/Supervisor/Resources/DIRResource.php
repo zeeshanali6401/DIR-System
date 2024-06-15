@@ -2,7 +2,7 @@
 
 namespace App\Filament\Supervisor\Resources;
 
-use App\Filament\Supervisor\Pages\DirImages;
+use App\Filament\Resources\Pages\DirImages;
 use App\Filament\Supervisor\Resources\DIRResource\Pages;
 use App\Filament\Supervisor\Resources\DIRResource\RelationManagers;
 use App\Models\DIR;
@@ -544,7 +544,7 @@ class DIRResource extends Resource
                 TextColumn::make('shift')->sortable(),
                 ImageColumn::make('images')->circular()
                     ->stacked()
-                    ->limit(6),
+                    ->limit(2),
                 TextColumn::make('finding_remarks')
                     ->state(function (DIR $record): string {
                         return $record->finding_remarks == 1 ? 'Found' : 'Not Found';
@@ -553,16 +553,7 @@ class DIRResource extends Resource
                 TextColumn::make('division')->sortable()->searchable(),
                 TextColumn::make('ps')->sortable()->searchable(),
                 TextColumn::make('case_nature')->sortable(),
-                TextColumn::make('case_date_time')->label('Date'),
                 TextColumn::make('caller_phone')->searchable(),
-                TextColumn::make('case_description'),
-                TextColumn::make('location')->searchable(),
-                TextColumn::make('camera_id')->searchable(),
-                TextColumn::make('evidence')->searchable(),
-
-                // TextColumn::make('finding_remarks')->sortable(),
-                TextColumn::make('pco_names'),
-
             ])
             ->filters([
                 Filter::make('case_date_time')
@@ -603,9 +594,6 @@ class DIRResource extends Resource
                 Tables\Actions\Action::make('Media')->color('warning')->icon('heroicon-o-camera')->url(fn (DIR $record): string =>  self::getUrl('ViewDirImages', ['record' => $record])),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
             ])
             ->recordUrl(null);
     }
